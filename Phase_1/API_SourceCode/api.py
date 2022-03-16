@@ -16,7 +16,7 @@ collection = db.SENG3011_collection
 #RETRUNS ALL REPORTS IN DATABASE 
 @api.route('/find', methods=['GET'])
 class MainClass(Resource):
-    def get():
+    def get(value):
         query = collection.find({})
         output = {}
         i = 0 
@@ -27,7 +27,7 @@ class MainClass(Resource):
         return jsonify(output)
 
 #THIS ONE FINDS ANY MATCHES IN SPECIFIED FIELD 
-@app.route('/find/<argument>/<value>/', methods=['GET'])
+@api.route('/find/<argument>/<value>/', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
         queryObject = {argument: value}
@@ -39,11 +39,11 @@ class MainClass(Resource):
             output[i].pop('_id')
             i+=1
         return jsonify(output)
-        
+
 #RETURNS REPORTS MATCHING DISEASE GIVEN 
-@api.route('/find/disease/<value>/', methods=['GET'])
+@api.route('/find/disease/<value>', methods=['GET'])
 class MainClass(Resource):
-    def get(value):
+    def get(argument, value):
         query = collection.find( {"reports.diseases.0": value } )
         output = {}
         i = 0
@@ -56,7 +56,7 @@ class MainClass(Resource):
 #RETURNS REPORTS MATCHING KEY TERMS
 @api.route('/find/keyterms/<value>/', methods=['GET'])
 class MainClass(Resource):
-    def get(value):
+    def get(argument, value):
         query = collection.find( {"reports.diseases.0": value } ) # HOW DO I GET KEY TERMS 
         output = {}
         i = 0
@@ -69,7 +69,7 @@ class MainClass(Resource):
 #RETURNS REPORTS MATCHING LOCATION
 @api.route('/find/location/<value>/', methods=['GET'])
 class MainClass(Resource):
-    def get(value):
+    def get(argument, value):
         query = collection.find( {"reports.locations.0": value } )
         output = {}
         i = 0
@@ -82,7 +82,7 @@ class MainClass(Resource):
 #RETURNS REPORTS MATCHING START AND END DATE
 @api.route('/find/date/<value>/', methods=['GET'])
 class MainClass(Resource):
-    def get(value):
+    def get(argument, value):
         query = collection.find( {"reports.event_date.0": value } )
         output = {}
         i = 0
