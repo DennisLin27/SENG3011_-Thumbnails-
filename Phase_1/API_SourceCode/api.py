@@ -97,4 +97,4 @@ def resource_not_found(e):
     return jsonify(error=str(e)), 404
 
 if __name__ == '__main__':
-    app.run(port=8000)
+    app.run(host='0.0.0.0')

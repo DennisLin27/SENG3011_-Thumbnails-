@@ -2,7 +2,7 @@
 FROM python:3.10.2
 
 # By default, Listen on port 8000
-EXPOSE 8000/tcp
+EXPOSE 5000
 
 # Set the working directory in the container
 WORKDIR /app
@@ -17,4 +17,5 @@ RUN pip install -r requirements.txt
 COPY api.py .
 
 # Specify the command to run on container start
-CMD [ "python", "./api.py" ]
+# CMD [ "python", "./api.py" ]
+CMD ["python", "./api.py", "--host", "0.0.0.0"]
