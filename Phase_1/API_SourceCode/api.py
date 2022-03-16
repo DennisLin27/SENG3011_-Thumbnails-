@@ -13,7 +13,6 @@ collection = db.SENG3011_collection
 @app.route('/find', methods=['GET'])
 def find():
     query = collection.find({})
-
     output = {}
     i = 0 
     for x in query:
@@ -22,13 +21,32 @@ def find():
         i+=1
     return jsonify(output)
 
-@app.route('/find-one/<argument>/<value>/', methods=['GET'])
+@app.route('/find/<argument>/<value>/', methods=['GET'])
 def findOne(argument, value):
     queryObject = {argument: value}
-    query = collection.find_one(queryObject)
-    query.pop('_id')
-    return jsonify(query)
+    query = collection.find(queryObject)
+    output = {}
+    i = 0
+    for x in query:
+        output[i] = x
+        output[i].pop('_id')
+        i+=1
+    return jsonify(output)
+
+@app.route('/find/disease/<value>/', methods=['GET'])
+def finddisease(value):
+    query = collection.find( {"reports.diseases.0": value } )
+    output = {}
+    i = 0
+    for x in query:
+        output[i] = x
+        output[i].pop('_id')
+        i+=1
+    return jsonify(output)
+
+@app.errorhandler(404)
+def resource_not_found(e):
+    return jsonify(error=str(e)), 404
 
 if __name__ == '__main__':
     app.run(port=8000)
-
