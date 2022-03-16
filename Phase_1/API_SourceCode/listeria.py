@@ -74,7 +74,7 @@ def listeria_scraper():
 
                     #remove excess tags and junk
                     d = d.replace("<p>Posted ", "")
-                    d = d.replace("<p>Posted ", "")
+                    d = d.replace("<p>Posted ", "")
                     d = d.replace("</p>", "")
                     d = d.replace("at ", "")
                     d = d.replace("ET", "")
@@ -186,21 +186,50 @@ def listeria_scraper():
 
             #examine status code
             #for pages that do not exits (404), location data in index page
+            if (p.status_code == 404):
+                r = route
+                r = r.replace("map.html", "index.html")
+                newPage = requests.get(base + r)
+                newSoup = BeautifulSoup(newPage.content, 'html.parser')
+                y = 0
+                for paragraph in newSoup.find_all('p'):
+                    para = paragraph.get_text()
+                    #para = individualPara.replace(u'\xa0', u' ')
+                    caseLocations = re.findall(r"([^.]*?states:[^.]*\.)",para)
+                    if not (caseLocations):
+                        continue
+                    locationString = caseLocations[0]
+                    #print(locationString)
+                    break
 
-            #else embedded in paragraphs
+                locationString = re.sub('.*states:', '', locationString)
+                locationString = re.sub('and', ',', locationString)
+                locationString = re.sub('\([0-9]\)', '', locationString)
+                locationsArray = locationString.split(",")
+                for location in locationsArray:
+                    finalLocation = location
+                    if (location != "" ):
+                        location = location.replace(".", "")
+                        location = re.sub('(^\s|\s$)', '', location)
+                        if (location != "" ):
+                            locations.append(location)
 
-
-            #
-            print(p.status_code)
-            #if (locations == []):
-            #    for p in s.find_all('p'):
-            #        print(data["url"])
-
-             #    for d in s.find_all("header"):
-            #        print(d)
-            #print("\n")
-
-
+            #some hard coded cases
+            #unable to parse some collapsable tables
+            #can't parse some p tags
+            urls_location = {}
+            urls_location["https://www.cdc.gov/listeria/outbreaks/packaged-salad-12-21-b/map.html"] = ['Illinois', 'Massachusetts', 'Michigan', 'New Jersey', 'New York', 'Ohio', 'Pennsylvania', 'Virginia']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/packaged-salad-mix-12-21/map.html"] = ['Idaho', 'Iowa', 'Maryland', 'Michigan', 'Minnesota', 'Nevada', 'North Carolina', 'Ohio', 'Oregon', 'Pennsylvania', 'Texas', 'Utah', 'Wisconsin']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/precooked-chicken-07-21/map.html"] = ['Delaware', 'Texas']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/hispanic-soft-cheese-02-21/map.html"] = ['Connecticut', 'Maryland', 'New York', 'Virginia']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/soft-cheese-03-17/map.html"] = ['Connecticut', 'Florida', 'New York', 'Vermont']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-02-14/map.html"] = ['Maryland', 'California']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-07-13/map.html"] = ['Illinois', 'Indiana', 'Minnesota', 'Ohio', 'Texas']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-09-12/map.html"] = ['California', 'Colorado', 'District of Columbia', 'Maryland', 'Massachusetts', 'Minnesota', 'Nebraska', 'New Jersey', 'New Mexico', 'New York', 'Ohio', 'Pennsylvania', 'Virginia', 'Washington']
+            urls_location["https://www.cdc.gov/listeria/outbreaks/cantaloupes-jensen-farms/map.html"] = ['Alabama', 'Arkansas', 'California', 'Colorado', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Louisiana', 'Maryland', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Mexico', 'New York', 'North Dakota', 'Oklahoma', 'Oregon', 'Pennsylvania', 'South Dakota', 'Texas', 'Utah', 'Virginia', 'West Virginia', 'Wisconsin', 'Wyoming']
+            
+            if not locations:
+                locations = urls_location[base+route]
             objects["locations"] = locations
             objects["syndromes"] = syndromes
             objects["diseases"] = diseases
@@ -212,19 +241,18 @@ def listeria_scraper():
 #takes a while to print
 if __name__ == "__main__":
     listeria_scraper()
-    #for i in listeria_scraper():
-    #    print(i)
-    #    print("\n")
+    for i in listeria_scraper():
+        print(i)
+        print("\n")
 
 '''
 url - done
 date of pub- done
 headline - done
 main_text - done
-
 reports:
     diseases - done
     syndromes - done
     event_date - done
-    locations
+    locations - done for most cases
 '''
