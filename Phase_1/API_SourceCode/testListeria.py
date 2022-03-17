@@ -1,13 +1,12 @@
-# INSTALL BEAUTIFULSOUP, DATEFINDER
+# INSTALL BEAUTIFULSOUP
 # pip install beautifulsoup4
-#pip install datefinder
+
 from functools import partialmethod
 from bs4 import BeautifulSoup
 import requests
 import re
 import json
 from datetime import datetime
-import datefinder
 
 #check if url exists in json list
 def check_url(url, list):
@@ -26,10 +25,10 @@ def listeria_scraper():
     soup = BeautifulSoup(page.content, 'html.parser')
 
     #load the disease and syndrome lists
-    diseaseFile = open('Phase_1\API_SourceCode\diseaseList.json')
+    diseaseFile = open('diseaseList.json')
     diseaseList = json.load(diseaseFile)
 
-    syndromeFile = open('Phase_1\API_SourceCode\syndromeList.json')
+    syndromeFile = open('syndromeList.json')
     syndromeList = json.load(syndromeFile)
 
     #regex pattern for the index files and files with case numbers
@@ -120,47 +119,22 @@ def listeria_scraper():
 
 
             #finding the main text
+            i = 0
             textArray = []
             for paragraph in s.find_all('p'):
                 individualPara = paragraph.get_text()
-                #random unicode is scattered through text
                 individualPara = individualPara.replace(u'\xa0', u' ')
-                individualPara = individualPara.replace(u'\u201c', u' ')
-                individualPara = individualPara.replace(u'\u201d', u' ')
-                individualPara = individualPara.replace(u'\u2019s', u' ')
-                individualPara = individualPara.replace(u'\u2014', u' ')
                 if (individualPara.find("div") == -1):
                     textArray.append(individualPara)
+                i = i + 1
 
             #the main text is longest text in the array
             data["main_text"] = max(textArray, key=len)
 
-            #finding the event date
-            for paragraph in s.find_all('p'):
-                individualPara = paragraph.get_text()
-                individualPara = individualPara.replace(u'\xa0', u' ')
-                #look for sentences with the keyword infected
-                if (individualPara.find("infected") != -1):
-                    stringInfected = re.findall(r"([^.]*?infected[^.]*\.)",individualPara)
-                    #if there are any dates, then capture thr first date as the event date
-                    #dates found in form month day, year
-                    pattern = re.compile(".*, [0-9]{4}.*")
-                    matches = []
-                    i = 0
-                    for s in stringInfected:
-                        if (pattern.match(s)):
-                            matches = list(datefinder.find_dates(s))
-                            if len(matches) > 0:
-                                eventDate = str(matches[0])
-                                eventDate = eventDate.replace("00:00:00", "xx:xx:xx")
-                                objects["event_date"] = eventDate
-                                i = 1
-                                break
-                    if (i == 1):
-                        break
-            #if there are no dates mentioned, then date of publication is event date
-            if (objects["event_date"] == ""):
-                objects["event_date"] = data["date_of_publication"]
+            ################## finding the event date
+
+
+
 
             #find the locations
             route = str(link.get('href'))
@@ -186,51 +160,15 @@ def listeria_scraper():
                     if state not in locations and state != "":
                         locations.append(state)
 
-            #examine status code
-            #for pages that do not exits (404), location data in index page
-            if (p.status_code == 404):
-                r = route
-                r = r.replace("map.html", "index.html")
-                newPage = requests.get(base + r)
-                newSoup = BeautifulSoup(newPage.content, 'html.parser')
-                y = 0
-                for paragraph in newSoup.find_all('p'):
-                    para = paragraph.get_text()
-                    #para = individualPara.replace(u'\xa0', u' ')
-                    caseLocations = re.findall(r"([^.]*?states:[^.]*\.)",para)
-                    if not (caseLocations):
-                        continue
-                    locationString = caseLocations[0]
-                    #print(locationString)
-                    break
+                #if locations is empty then 
+                #DONT KNOW HOW TO PARSE COLLAPSABLE TABLES 🙁
+            #if (locations == []):
+            #    print("empt")
+            #    for d in s.find_all("header"):
+            #        print(d)
+            #print("\n")
 
-                locationString = re.sub('.*states:', '', locationString)
-                locationString = re.sub('and', ',', locationString)
-                locationString = re.sub('\([0-9]\)', '', locationString)
-                locationsArray = locationString.split(",")
-                for location in locationsArray:
-                    finalLocation = location
-                    if (location != "" ):
-                        location = location.replace(".", "")
-                        location = re.sub('(^\s|\s$)', '', location)
-                        if (location != "" ):
-                            locations.append(location)
 
-            #some hard coded cases
-            #unable to parse some collapsable tables - no table tags, div tags
-            #can't parse some p tags - because text not contained in p tag
-            urls_location = {}
-            urls_location["https://www.cdc.gov/listeria/outbreaks/packaged-salad-12-21-b/map.html"] = ['Illinois', 'Massachusetts', 'Michigan', 'New Jersey', 'New York', 'Ohio', 'Pennsylvania', 'Virginia']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/packaged-salad-mix-12-21/map.html"] = ['Idaho', 'Iowa', 'Maryland', 'Michigan', 'Minnesota', 'Nevada', 'North Carolina', 'Ohio', 'Oregon', 'Pennsylvania', 'Texas', 'Utah', 'Wisconsin']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/precooked-chicken-07-21/map.html"] = ['Delaware', 'Texas']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/hispanic-soft-cheese-02-21/map.html"] = ['Connecticut', 'Maryland', 'New York', 'Virginia']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/soft-cheese-03-17/map.html"] = ['Connecticut', 'Florida', 'New York', 'Vermont']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-02-14/map.html"] = ['Maryland', 'California']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-07-13/map.html"] = ['Illinois', 'Indiana', 'Minnesota', 'Ohio', 'Texas']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-09-12/map.html"] = ['California', 'Colorado', 'District of Columbia', 'Maryland', 'Massachusetts', 'Minnesota', 'Nebraska', 'New Jersey', 'New Mexico', 'New York', 'Ohio', 'Pennsylvania', 'Virginia', 'Washington']
-            urls_location["https://www.cdc.gov/listeria/outbreaks/cantaloupes-jensen-farms/map.html"] = ['Alabama', 'Arkansas', 'California', 'Colorado', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Louisiana', 'Maryland', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Mexico', 'New York', 'North Dakota', 'Oklahoma', 'Oregon', 'Pennsylvania', 'South Dakota', 'Texas', 'Utah', 'Virginia', 'West Virginia', 'Wisconsin', 'Wyoming']
-            if not locations:
-                locations = urls_location[base+route]
             objects["locations"] = locations
             objects["syndromes"] = syndromes
             objects["diseases"] = diseases
@@ -240,7 +178,7 @@ def listeria_scraper():
     return articlesData
 
 #takes a while to print
-if __name__ == "__main__":
+if __name__ == "_main_":
     listeria_scraper()
     for i in listeria_scraper():
         print(i)
@@ -251,9 +189,10 @@ url - done
 date of pub- done
 headline - done
 main_text - done
+
 reports:
     diseases - done
     syndromes - done
-    event_date - done
-    locations - done for most cases, hardcoded for some cases
+    event_date
+    locations
 '''
