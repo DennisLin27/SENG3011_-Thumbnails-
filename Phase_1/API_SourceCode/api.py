@@ -58,9 +58,9 @@ class MainClass(Resource):
         end_date = param_dict['end_date']
         location = ""
         keyterms = []
-        if (param_dict['location']): 
+        if "location" in param_dict.keys(): 
             location =  param_dict['location']
-        if param_dict['keyterms']:
+        if "keyterms" in param_dict.keys():
             keyterms = param_dict['keyterms'].split(",")
 
         # Checks dates are in the correct format
