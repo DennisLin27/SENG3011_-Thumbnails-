@@ -123,7 +123,12 @@ def listeria_scraper():
             textArray = []
             for paragraph in s.find_all('p'):
                 individualPara = paragraph.get_text()
+                #random unicode is scattered through text
                 individualPara = individualPara.replace(u'\xa0', u' ')
+                individualPara = individualPara.replace(u'\u201c', u' ')
+                individualPara = individualPara.replace(u'\u201d', u' ')
+                individualPara = individualPara.replace(u'\u2019s', u' ')
+                individualPara = individualPara.replace(u'\u2014', u' ')
                 if (individualPara.find("div") == -1):
                     textArray.append(individualPara)
 
@@ -181,9 +186,6 @@ def listeria_scraper():
                     if state not in locations and state != "":
                         locations.append(state)
 
-                #if locations is empty then 
-                #DONT KNOW HOW TO PARSE COLLAPSABLE TABLES :(
-
             #examine status code
             #for pages that do not exits (404), location data in index page
             if (p.status_code == 404):
@@ -215,8 +217,8 @@ def listeria_scraper():
                             locations.append(location)
 
             #some hard coded cases
-            #unable to parse some collapsable tables
-            #can't parse some p tags
+            #unable to parse some collapsable tables - no table tags, div tags
+            #can't parse some p tags - because text not contained in p tag
             urls_location = {}
             urls_location["https://www.cdc.gov/listeria/outbreaks/packaged-salad-12-21-b/map.html"] = ['Illinois', 'Massachusetts', 'Michigan', 'New Jersey', 'New York', 'Ohio', 'Pennsylvania', 'Virginia']
             urls_location["https://www.cdc.gov/listeria/outbreaks/packaged-salad-mix-12-21/map.html"] = ['Idaho', 'Iowa', 'Maryland', 'Michigan', 'Minnesota', 'Nevada', 'North Carolina', 'Ohio', 'Oregon', 'Pennsylvania', 'Texas', 'Utah', 'Wisconsin']
@@ -227,7 +229,6 @@ def listeria_scraper():
             urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-07-13/map.html"] = ['Illinois', 'Indiana', 'Minnesota', 'Ohio', 'Texas']
             urls_location["https://www.cdc.gov/listeria/outbreaks/cheese-09-12/map.html"] = ['California', 'Colorado', 'District of Columbia', 'Maryland', 'Massachusetts', 'Minnesota', 'Nebraska', 'New Jersey', 'New Mexico', 'New York', 'Ohio', 'Pennsylvania', 'Virginia', 'Washington']
             urls_location["https://www.cdc.gov/listeria/outbreaks/cantaloupes-jensen-farms/map.html"] = ['Alabama', 'Arkansas', 'California', 'Colorado', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Louisiana', 'Maryland', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Mexico', 'New York', 'North Dakota', 'Oklahoma', 'Oregon', 'Pennsylvania', 'South Dakota', 'Texas', 'Utah', 'Virginia', 'West Virginia', 'Wisconsin', 'Wyoming']
-            
             if not locations:
                 locations = urls_location[base+route]
             objects["locations"] = locations
@@ -254,5 +255,5 @@ reports:
     diseases - done
     syndromes - done
     event_date - done
-    locations - done for most cases
+    locations - done for most cases, hardcoded for some cases
 '''
