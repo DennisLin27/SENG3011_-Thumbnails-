@@ -1,5 +1,5 @@
 from sqlite3 import DateFromTicks
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 from pymongo import MongoClient
 from flask_restx import Api, Resource, reqparse
@@ -85,32 +85,26 @@ class MainClass(Resource):
 #RETURNS REPORTS MATCHING START AND END DATE
 @api.route('/find/date/<value>/', methods=['GET'])
 class MainClass(Resource):
-    def get(argument, value):
-        print(value)
-        
+    def get(argument, value):        
         dates = value.split("&")
-        print(dates)
+
         # Checks if dates are seperated by an &
         if (len(dates) != 2):
-            print("Error: Dates must be seperated by a \"&\"")
-            return -1 #REPLACE WITH ERROR CODE
+            return make_response(jsonify("ERROR: Please enter dates seperated by a '&'"),400)
         
         # Checks if dates are of format: YYYY-MM-DDTHH:mm:ss
         for date in dates:
             if not dateFormatCheck(date):
-                print("Error: Dates must be of format: YYYY-MM-DDTHH:mm:ss") 
-                return -1 #REPLACE WITH ERROR CODE
+                return make_response(jsonify("ERROR: Please enter dates in correct format: “yyyy-MM-ddTHH:mm:ss”"),400)
             
             if not dateFutureCheck(date):
-                print("Error: Dates must not be in the future") 
-                return -1 #REPLACE WITH ERROR CODE
+                return make_response(jsonify("ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
               
         d1 = dateFormatCheck(dates[0])
         d2 = dateFormatCheck(dates[1])
 
         if not dateOrderCheck(d1,d2):
-            print("Error: The first date must not be after the second date")
-            return -1 #REPLACE WITH ERROR CODE
+            return make_response(jsonify("ERROR: Please enter valid start and end dates. Start date must not be after end date"),400)
 
 
         query = collection.find({})
@@ -161,13 +155,6 @@ def checkDateRange(date,d1,d2):
        return False
     
     return True
-
-
-
-
-
-
-
 
 @app.errorhandler(404)
 def resource_not_found(e):
