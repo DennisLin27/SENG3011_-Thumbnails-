@@ -26,10 +26,10 @@ def listeria_scraper():
     soup = BeautifulSoup(page.content, 'html.parser')
 
     #load the disease and syndrome lists
-    diseaseFile = open('diseaseList.json')
+    diseaseFile = open('Phase_1\API_SourceCode\diseaseList.json')
     diseaseList = json.load(diseaseFile)
 
-    syndromeFile = open('syndromeList.json')
+    syndromeFile = open('Phase_1\API_SourceCode\syndromeList.json')
     syndromeList = json.load(syndromeFile)
 
     #regex pattern for the index files and files with case numbers
