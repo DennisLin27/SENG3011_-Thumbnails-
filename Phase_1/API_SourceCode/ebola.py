@@ -187,4 +187,3 @@ if __name__ == "__main__":
         print("\n")
         # Add document to the cluster
         result = collection.insert_one(i) 
-'''
