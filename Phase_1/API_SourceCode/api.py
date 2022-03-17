@@ -44,17 +44,12 @@ class MainClass(Resource):
         return jsonify(response)
 
 #THIS ONE FINDS ANY MATCHES IN SPECIFIED FIELD 
-@api.route('/find/<argument>/<value>/', methods=['GET'])
+@api.route('/find/<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
-        queryObject = {argument: value}
-        query = collection.find(queryObject)
+
         output = {}
-        i = 0
-        for x in query:
-            output[i] = x
-            output[i].pop('_id')
-            i+=1
+            
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
         response = {'data': output, 'log': logSnippet}
