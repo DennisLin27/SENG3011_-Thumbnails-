@@ -21,7 +21,7 @@ def test_invalid_dateformat():
     #p = requests.get(base+"")
     #print(p.status_code)
     result_append("test", "test", "test", "test", "test")
-    result_append("test", "test", "test", "test", "test")
+    result_append("test", "test_fail", "test", "test", "test")
     
 
 if __name__ == "__main__":
