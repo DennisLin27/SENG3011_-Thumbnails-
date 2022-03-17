@@ -28,7 +28,7 @@ logSnippet = {
 }
 
 #RETRUNS ALL REPORTS IN DATABASE 
-@api.route('/find', methods=['GET'])
+@api.route('/findAll', methods=['GET'])
 class MainClass(Resource):
     def get(value):
         query = collection.find({})
@@ -44,11 +44,47 @@ class MainClass(Resource):
         return jsonify(response)
 
 #THIS ONE FINDS ANY MATCHES IN SPECIFIED FIELD 
-@api.route('/find/<value>', methods=['GET'])
+@api.route('/find<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
+        params = value.split("&")
+        print(params)
+        param_dict = {}
+        for param in params:
+            values = param.split("=")
+            param_dict[values[0]] = values[1]
 
-        output = {}
+        start_date = param_dict['start_date']
+        end_date = param_dict['end_date']
+        location = ""
+        keyterms = []
+        if (param_dict['location']): 
+            location =  param_dict['location']
+        if param_dict['keyterms']:
+            keyterms = param_dict['keyterms'].split(",")
+
+        # Checks dates are in the correct format
+        if not (dateFormatCheck(start_date) and dateFormatCheck(end_date)):
+            return make_response(jsonify("ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"),400)
+        
+        # Checks if dates are not in the future
+        if not (dateFutureCheck(start_date) and dateFutureCheck(end_date)):
+            return make_response(jsonify("ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
+        
+        d1 = dateFormatCheck(start_date)
+        d2 = dateFormatCheck(end_date)
+        # Checks if dates are in the correct order
+        if not dateOrderCheck(d1,d2):
+            return make_response(jsonify("ERROR: Please enter valid start and end dates. Start date must not be after end date"),400)
+
+        output = get_dates(d1,d2)
+        if location: 
+            output = get_location(location, output)
+        
+        if keyterms:
+            for term in keyterms:
+                output = get_keyterms(term, output)
+
             
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
@@ -129,18 +165,28 @@ class MainClass(Resource):
 
 
         query = collection.find({})
-        output = {}
-        i = 0
+        output = []
         for x in query:
-            date = x.pop('date_of_publication')
+            date = x['date_of_publication']
             if checkDateRange(date, d1,d2):
-                output[i] = x
-                output[i].pop('_id')
-                i+=1
+                x.pop('_id')
+                output.append(x)
+        
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
         response = {'data': output, 'log': logSnippet}
         return jsonify(response)
+
+def get_dates(d1,d2):
+    query = collection.find({})
+    output = []
+    for x in query:
+        date = x['date_of_publication']
+        if checkDateRange(date, d1,d2):
+            x.pop('_id')
+            output.append(x)
+    return output
+        
 
 def dateFormatCheck(date):
     try:
@@ -178,6 +224,32 @@ def checkDateRange(date,d1,d2):
        return False
     
     return True
+
+def get_location(location, output):
+    result = []
+    for x in output:
+        lowercase_loc = []
+        locations = x['reports']['locations']
+        for loc in locations:
+            lowercase_loc.append(loc.lower())
+        print(locations)
+        if location in lowercase_loc:
+            result.append(x)
+    return result
+
+def get_keyterms(term, output):
+    result = []
+    for x in output:
+        lowercase_dis = []
+        diseases = x['reports']['diseases']
+        lowercase_main = x['main_text'].lower()
+        for dis in diseases:
+            lowercase_dis.append(dis.lower())
+        if (term.lower() in lowercase_dis) or (term.lower() in lowercase_main):
+            result.append(x)
+    return result
+        
+
 
 @app.errorhandler(404)
 def resource_not_found(e):
