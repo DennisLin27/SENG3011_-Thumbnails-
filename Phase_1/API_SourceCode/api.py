@@ -44,9 +44,10 @@ class MainClass(Resource):
         return jsonify(response)
 
 #THIS ONE FINDS ANY MATCHES IN SPECIFIED FIELD 
-@api.route('/find?<value>', methods=['GET'])
+@api.route('/find<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
+        print(value)
         params = value.split("&")
         print(params)
         param_dict = {}
@@ -92,7 +93,7 @@ class MainClass(Resource):
         return jsonify(response)
 
 #RETURNS REPORTS MATCHING KEY TERMS
-@api.route('/find/keyterms?<value>/', methods=['GET'])
+@api.route('/find/keyterms<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
         query = collection.find({}) # HOW DO I GET KEY TERMS 
@@ -107,7 +108,7 @@ class MainClass(Resource):
         return jsonify(response)
 
 #RETURNS REPORTS MATCHING LOCATION
-@api.route('/find/location?<value>/', methods=['GET'])
+@api.route('/find/location<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
         print(value)
@@ -120,7 +121,7 @@ class MainClass(Resource):
         return jsonify(response)
 
 #RETURNS REPORTS MATCHING START AND END DATE
-@api.route('/find/date?<value>/', methods=['GET'])
+@api.route('/find/date<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):        
         dates = value.split("&")
