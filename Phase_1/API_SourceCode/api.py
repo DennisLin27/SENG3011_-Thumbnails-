@@ -47,6 +47,7 @@ class MainClass(Resource):
 @api.route('/find?<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
+        print(value)
         params = value.split("&")
         print(params)
         param_dict = {}
