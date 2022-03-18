@@ -66,17 +66,17 @@ class MainClass(Resource):
 
         # Checks dates are in the correct format
         if not (dateFormatCheck(start_date) and dateFormatCheck(end_date)):
-            return make_response(jsonify("ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"),400)
+            return make_response(jsonify(error = "ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"),400)
         
         # Checks if dates are not in the future
         if not (dateFutureCheck(start_date) and dateFutureCheck(end_date)):
-            return make_response(jsonify("ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
+            return make_response(jsonify(error = "ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
         
         d1 = dateFormatCheck(start_date)
         d2 = dateFormatCheck(end_date)
         # Checks if dates are in the correct order
         if not dateOrderCheck(d1,d2):
-            return make_response(jsonify("ERROR: Please enter valid start and end dates. Start date must not be after end date"),400)
+            return make_response(jsonify(error = "ERROR: Please enter valid start and end dates. Start date must not be after end date"),400)
 
         output = get_dates(d1,d2)
         if location: 
@@ -128,21 +128,21 @@ class MainClass(Resource):
 
         # Checks if dates are seperated by an &
         if (len(dates) != 2):
-            return make_response(jsonify("ERROR: Please enter dates seperated by a '&'"),400)
+            return make_response(jsonify(error = "ERROR: Please enter dates seperated by a '&'"),400)
         
         # Checks if dates are of format: YYYY-MM-DDTHH:mm:ss
         for date in dates:
             if not dateFormatCheck(date):
-                return make_response(jsonify("ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"),400)
+                return make_response(jsonify(error = "ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"),400)
             # Checks if dates are not in the future
             if not dateFutureCheck(date):
-                return make_response(jsonify("ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
+                return make_response(jsonify(error = "ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
               
         d1 = dateFormatCheck(dates[0])
         d2 = dateFormatCheck(dates[1])
         # Checks if dates are in the correct order
         if not dateOrderCheck(d1,d2):
-            return make_response(jsonify("ERROR: Please enter valid start and end dates. Start date must not be after end date"),400)
+            return make_response(jsonify(error = "ERROR: Please enter valid start and end dates. Start date must not be after end date"),400)
 
 
         query = collection.find({})
