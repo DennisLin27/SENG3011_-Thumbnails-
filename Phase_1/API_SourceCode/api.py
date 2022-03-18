@@ -1,8 +1,9 @@
+from optparse import Values
 from sqlite3 import DateFromTicks
 from flask import Flask, jsonify, request, make_response
 from flask_cors import CORS
 from pymongo import MongoClient
-from flask_restx import Api, Resource, reqparse
+from flask_restx import Api, Resource, reqparse,fields
 import time
 import datetime
 import re
@@ -12,11 +13,43 @@ cluster = "mongodb+srv://thumbnails:thumbnails@cluster0.lfkm3.mongodb.net/SENG30
 app = Flask(__name__)
 client = MongoClient(cluster)
 
-api = Api(app)
+apii = Api(app,title = 'Outbreak Search API')
+api = apii.namespace('', description = "Outbreak Search related endpoints")
 
 db = client.SENG3011
 
 collection = db.SENG3011_collection
+
+response_model = api.model('response model', {
+    'date_of_publication': fields.String(
+        description = 'Date of report publication'
+    ),
+    'headline': fields.String(
+        description = 'Headline of article'
+    ),
+    'main_text': fields.String(
+        description = 'Main text of article'
+    ),
+    'reports': fields.Nested(
+        api.model('reports',{
+            'diseases': fields.String(
+                description = 'Disease in mentioned in report'
+            ),
+            'event-date': fields.DateTime(
+                description = 'date and time event'
+            ),
+            'locations': fields.String(
+                description = 'List of locations menitoned in report'
+            ),
+            'syndromes': fields.String(
+                description = 'List of syndromes mentioned in report '
+            )
+        })
+    ),
+    'url': fields.String(
+        description = 'URL of article'
+    )
+})
 
 # timestamp when end user access endpoints
 timeStamp = time.time()
@@ -31,7 +64,9 @@ logSnippet = {
 #RETRUNS ALL REPORTS IN DATABASE 
 @api.route('/findAll', methods=['GET'])
 class MainClass(Resource):
+    @api.doc(model=[response_model])
     def get(value):
+        '''Search for all inputs in database'''
         query = collection.find({})
         output = {}
         resources = {}
@@ -60,10 +95,19 @@ class MainClass(Resource):
 #THIS ONE FINDS ANY MATCHES IN SPECIFIED FIELD 
 @api.route('/find<value>', methods=['GET'])
 class MainClass(Resource):
+    @api.doc(model=[response_model])
+    @api.doc(responses={
+        400 : 'Input date not seperated by a & character',
+        401 : 'Dates in incorrect format (Expected : YYYY-MM-DDTHH:mm:ss)',
+        402 : 'Invalid start and end dates (Cannot be future dates)',
+        403 : 'Start Date is before End Date'
+    })
+    @api.doc(params = {'value' : 'Enter a start date, end date and optional keywords or locations in the form \n start_date={date1}&end_date={date2}&location={location}&keyterms={term1,term2} '})
+    
     def get(argument, value):
+        '''Find reports based on start date, end date AND keywords OR location'''
         print(value)
         params = value.split("&")
-        print(params)
         param_dict = {}
         for param in params:
             values = param.split("=")
@@ -118,7 +162,10 @@ class MainClass(Resource):
 #RETURNS REPORTS MATCHING KEY TERMS
 @api.route('/find/keyterms<value>', methods=['GET'])
 class MainClass(Resource):
+    @api.doc(model=[response_model])
+    @api.doc(params = {'value' : 'Enter a keyterm in the form keyterms={term1,term2}'})
     def get(argument, value):
+        '''Find Reports based on key terms'''
         query = collection.find({}) # HOW DO I GET KEY TERMS 
         
         keyterms = value.split(",")
@@ -133,7 +180,10 @@ class MainClass(Resource):
 #RETURNS REPORTS MATCHING LOCATION
 @api.route('/find/location<value>', methods=['GET'])
 class MainClass(Resource):
+    @api.doc(model=[response_model])
+    @api.doc(params = {'value' : 'Enter a location in the form location={location}'})
     def get(argument, value):
+        '''Find reports based on location'''
         print(value)
         query = collection.find({})
         output = get_location(value.lower(), query)
@@ -146,23 +196,40 @@ class MainClass(Resource):
 #RETURNS REPORTS MATCHING START AND END DATE
 @api.route('/find/date<value>', methods=['GET'])
 class MainClass(Resource):
+    @api.doc(model=[response_model])
+    @api.doc(params = {'value' : 'Enter a start and end date in the form start_date={date1}&end_date={date2}'})
+    @api.doc(responses={
+        400 : 'Input date not seperated by a & character',
+        401 : 'Dates in incorrect format (Expected : YYYY-MM-DDTHH:mm:ss)',
+        402 : 'Invalid start and end dates (Cannot be future dates)',
+        403 : 'Start Date is before End Date'
+    })
     def get(argument, value):        
-        dates = value.split("&")
+        '''Find reports based on date''' 
+        values = value.split("&")
 
         # Checks if dates are seperated by an &
-        if (len(dates) != 2):
+        if (len(values) != 2):
             return make_response(jsonify(error = "ERROR: Please enter dates seperated by a '&'"),400)
+
+        date_dict = {}
+        for v in values:
+            dates = v.split("=")
+            date_dict[dates[0]]=dates[1]
         
+        start_date = date_dict['start_date']
+        end_date = date_dict['end_date']
+
         # Checks if dates are of format: YYYY-MM-DDTHH:mm:ss
-        for date in dates:
-            if not dateFormatCheck(date):
-                return make_response(jsonify(error = "ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"),400)
-            # Checks if dates are not in the future
-            if not dateFutureCheck(date):
-                return make_response(jsonify(error = "ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
+        if not (dateFormatCheck(start_date) and dateFormatCheck(end_date)):
+            return make_response(jsonify(error = "ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"),400)
+        # Checks if dates are not in the future
+        if not (dateFutureCheck(start_date) and dateFutureCheck(end_date)):
+            return make_response(jsonify(error = "ERROR: Please enter in valid start and end dates. Dates cannot be future dates."),400)
               
-        d1 = dateFormatCheck(dates[0])
-        d2 = dateFormatCheck(dates[1])
+        d1 = dateFormatCheck(start_date)
+        d2 = dateFormatCheck(end_date)
+
         # Checks if dates are in the correct order
         if not dateOrderCheck(d1,d2):
             return make_response(jsonify(error = "ERROR: Please enter valid start and end dates. Start date must not be after end date"),400)
@@ -200,7 +267,6 @@ def dateFormatCheck(date):
     return dateObject
         
 def dateOrderCheck(d1,d2):
-    print(d1,d2,d1<d2)
     if (d1 >= d2):
         return False
     return True
@@ -223,7 +289,6 @@ def checkDateRange(date,d1,d2):
         d3 = datetime.datetime.strptime(temp_date,'%Y-%m-%d-%H-%M')
     else:
         return False
-    
     if not ((d1 <= d3) and (d3 <= d2)):
        return False
     

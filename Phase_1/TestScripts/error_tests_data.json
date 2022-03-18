@@ -1,0 +1,52 @@
+{
+  "input": "start_date=2010-03-04T00:00:00&end_date=2022-03-05T00:00:00",
+  "expected_error_code": "200",
+  "returned_error_code": "200",
+  "expected_error_message": "Correct data returned",
+  "returned_error_message": "Correct data returned",
+  "test_status": "TEST PASSED"
+}{
+  "input": "start_date=201-03-0T00:00:00&end_date=2022-03-05T00:00:0",
+  "expected_error_code": "400",
+  "returned_error_code": "400",
+  "expected_error_message": {
+    "error": "ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"
+  },
+  "returned_error_message": {
+    "error": "ERROR: Please enter dates in correct format: 'YYYY-MM-DDTHH:mm:ss'"
+  },
+  "test_status": "TEST PASSED"
+}{
+  "input": "start_date=2011-03-01T00:00:00&end_date=2023-03-05T00:00:0",
+  "expected_error_code": "400",
+  "returned_error_code": "400",
+  "expected_error_message": {
+    "error": "ERROR: Please enter in valid start and end dates. Dates cannot be future dates."
+  },
+  "returned_error_message": {
+    "error": "ERROR: Please enter in valid start and end dates. Dates cannot be future dates."
+  },
+  "test_status": "TEST PASSED"
+}{
+  "input": "start_date=2022-03-05T00:00:0&end_date=2010-03-05T00:00:00",
+  "expected_error_code": "400",
+  "returned_error_code": "400",
+  "expected_error_message": {
+    "error": "ERROR: Please enter valid start and end dates. Start date must not be after end date"
+  },
+  "returned_error_message": {
+    "error": "ERROR: Please enter valid start and end dates. Start date must not be after end date"
+  },
+  "test_status": "TEST PASSED"
+}{
+  "input": "/info",
+  "expected_error_code": "404",
+  "returned_error_code": "404",
+  "expected_error_message": {
+    "error": "404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."
+  },
+  "returned_error_message": {
+    "error": "404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again."
+  },
+  "test_status": "TEST PASSED"
+}
