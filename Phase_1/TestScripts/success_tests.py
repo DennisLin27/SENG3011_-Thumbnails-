@@ -18,10 +18,17 @@ def test_all_ebola():
     status = "TEST FAILED"
     input = "start_date=2010-03-04T00:00:00&end_date=2022-03-05T00:00:00&keyterms=ebola"
     p = requests.get(geturl(input))
+    '''
     n = open("ebola_expected.json", "r")
     file = json.load(n)
     
-    if (p.json() == n):
+    if (p.json() == file):
+        status = "TEST PASSED"
+    '''
+    with open('ebola_output.json', 'w') as f:
+        json.dump(p.json(), f)
+    
+    if (filecmp.cmp('ebola_output.json', 'ebola_expected.json')):
         status = "TEST PASSED"
     print(status)
     
