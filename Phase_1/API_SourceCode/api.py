@@ -130,7 +130,6 @@ class MainClass(Resource):
             for term in keyterms:
                 output = get_keyterms(term, output)
 
-            
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
         response = {'data': output, 'log': logSnippet}
