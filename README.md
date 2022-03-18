@@ -20,4 +20,4 @@ Deliverable 2:
 4. Routinely update database data using AWS lambda function with a clock that automates scraping process timely.
 5. Detailed and descriptive API testing (Testing Documentation Report), including input and output files with documentations, error report and tables.
 6. Log snippet that are sent directly to user as well as storing request info as log file in backend.
-7. Updated Design Report, Project Management Plan and Gantt chart.
+7. Updated Design Report, Project Management Plan and Gantt chart in Design Documentation Report
