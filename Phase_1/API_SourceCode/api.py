@@ -44,7 +44,7 @@ class MainClass(Resource):
         return jsonify(response)
 
 #THIS ONE FINDS ANY MATCHES IN SPECIFIED FIELD 
-@api.route('/find<value>', methods=['GET'])
+@api.route('/find?<value>', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
         params = value.split("&")
@@ -91,56 +91,36 @@ class MainClass(Resource):
         response = {'data': output, 'log': logSnippet}
         return jsonify(response)
 
-#RETURNS REPORTS MATCHING DISEASE GIVEN 
-@api.route('/find/disease/<value>', methods=['GET'])
-class MainClass(Resource):
-    def get(argument, value):
-        query = collection.find( {"reports.diseases.0": value } )
-        output = {}
-        i = 0
-        for x in query:
-            output[i] = x
-            output[i].pop('_id')
-            i+=1
-        timeStamp = time.time()
-        logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
-        response = {'data': output, 'log': logSnippet}
-        return jsonify(response)
-
 #RETURNS REPORTS MATCHING KEY TERMS
-@api.route('/find/keyterms/<value>/', methods=['GET'])
+@api.route('/find/keyterms?<value>/', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
-        query = collection.find( {"reports.diseases.0": value } ) # HOW DO I GET KEY TERMS 
-        output = {}
-        i = 0
-        for x in query:
-            output[i] = x
-            output[i].pop('_id')
-            i+=1
+        query = collection.find({}) # HOW DO I GET KEY TERMS 
+        
+        keyterms = value.split(",")
+        for term in keyterms:
+            query = get_keyterms(term, query) 
+
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
-        response = {'data': output, 'log': logSnippet}
+        response = {'data': query, 'log': logSnippet}
         return jsonify(response)
 
 #RETURNS REPORTS MATCHING LOCATION
-@api.route('/find/location/<value>/', methods=['GET'])
+@api.route('/find/location?<value>/', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):
-        query = collection.find( {"reports.locations.0": value } )
-        output = {}
-        i = 0
-        for x in query:
-            output[i] = x
-            output[i].pop('_id')
-            i+=1
+        print(value)
+        query = collection.find({})
+        output = get_location(value.lower(), query)
+        
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
         response = {'data': output, 'log': logSnippet}
         return jsonify(response)
 
 #RETURNS REPORTS MATCHING START AND END DATE
-@api.route('/find/date/<value>/', methods=['GET'])
+@api.route('/find/date?<value>/', methods=['GET'])
 class MainClass(Resource):
     def get(argument, value):        
         dates = value.split("&")
@@ -228,24 +208,28 @@ def checkDateRange(date,d1,d2):
 def get_location(location, output):
     result = []
     for x in output:
+        if "_id" in x.keys():
+            x.pop('_id')
         lowercase_loc = []
         locations = x['reports']['locations']
         for loc in locations:
             lowercase_loc.append(loc.lower())
-        print(locations)
-        if location in lowercase_loc:
+        if location.lower() in lowercase_loc:
             result.append(x)
     return result
 
 def get_keyterms(term, output):
     result = []
     for x in output:
+        if "_id" in x.keys():
+            x.pop('_id')
         lowercase_dis = []
         diseases = x['reports']['diseases']
         lowercase_main = x['main_text'].lower()
+        lowercase_headline = x['headline'].lower()
         for dis in diseases:
             lowercase_dis.append(dis.lower())
-        if (term.lower() in lowercase_dis) or (term.lower() in lowercase_main):
+        if (term.lower() in lowercase_dis) or ((term.lower() in lowercase_main) or (term.lower() in lowercase_headline)):
             result.append(x)
     return result
         
