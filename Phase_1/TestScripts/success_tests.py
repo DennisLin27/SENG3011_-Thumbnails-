@@ -6,7 +6,7 @@ import filecmp
 def result_append(description, expected_status_code, returned_status_code, status ):
     if (expected_status_code != returned_status_code):
         status = "TEST FAILED"
-    result = {"input" : description, "expected_status_code":expected_status_code, "returned_status_code":returned_status_code, "status": status}
+    result = {"description" : description, "expected_status_code":expected_status_code, "returned_status_code":returned_status_code, "status": status}
     with open('success_test_data.json', 'a') as outfile:
         json.dump(result, outfile, indent=2)
 
