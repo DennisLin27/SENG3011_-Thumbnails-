@@ -12,7 +12,7 @@ app = Flask(__name__)
 client = MongoClient(cluster)
 
 apii = Api(app,title = 'Outbreak Search API')
-api = apii.namespace('Outbreak Search', description = "Outbreak Search related endpoints")
+api = apii.namespace('', description = "Outbreak Search related endpoints")
 
 db = client.SENG3011
 
