@@ -88,7 +88,7 @@ class MainClass(Resource):
         402 : 'Invalid start and end dates (Cannot be future dates)',
         403 : 'Start Date is before End Date'
     })
-    @api.doc(params = {'value' : 'Enter a start date, end date and optional keywords or locations in the form \n findstart_date=<date1>&end_date=<date2>&location<location>&keyterms=<term1,term2> '})
+    @api.doc(params = {'value' : 'Enter a start date, end date and optional keywords or locations in the form \n start_date={date1}&end_date={date2}&location={location}&keyterms={term1,term2} '})
     
     def get(argument, value):
         '''Find reports based on start date, end date AND keywords OR location'''
@@ -140,7 +140,7 @@ class MainClass(Resource):
 @api.route('/find/keyterms<value>', methods=['GET'])
 class MainClass(Resource):
     @api.doc(model=[response_model])
-    @api.doc(params = {'value' : 'Enter a keyterm'})
+    @api.doc(params = {'value' : 'Enter a keyterm in the form keyterms={term1,term2}'})
     def get(argument, value):
         '''Find Reports based on key terms'''
         query = collection.find({}) # HOW DO I GET KEY TERMS 
@@ -158,7 +158,7 @@ class MainClass(Resource):
 @api.route('/find/location<value>', methods=['GET'])
 class MainClass(Resource):
     @api.doc(model=[response_model])
-    @api.doc(params = {'value' : 'Enter a location'})
+    @api.doc(params = {'value' : 'Enter a location in the form location={location}'})
     def get(argument, value):
         '''Find reports based on location'''
         print(value)
@@ -174,7 +174,7 @@ class MainClass(Resource):
 @api.route('/find/date<value>', methods=['GET'])
 class MainClass(Resource):
     @api.doc(model=[response_model])
-    @api.doc(params = {'value' : 'Enter a start and end date'})
+    @api.doc(params = {'value' : 'Enter a start and end date in the form start_date={date1}&end_date={date2}'})
     @api.doc(responses={
         400 : 'Input date not seperated by a & character',
         401 : 'Dates in incorrect format (Expected : YYYY-MM-DDTHH:mm:ss)',
@@ -183,7 +183,7 @@ class MainClass(Resource):
     })
     def get(argument, value):        
         '''Find reports based on date''' 
-        dates = value.split("&")
+        values = value.split("&")
 
         # Checks if dates are seperated by an &
         if (len(values) != 2):
