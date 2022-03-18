@@ -19,5 +19,5 @@ Deliverable 2:
 3. Implemented multiple meaningful routes that can be accessed via HTTP requests, allowing user input to match data such as dates (between start_date and end_date), location and key_term.
 4. Routinely update database data using AWS lambda function with a clock that automates scraping process timely.
 5. Detailed and descriptive API testing (Testing Documentation Report), including input and output files with documentations, error report and tables.
-6. Log snippet that are sent directly to user as well as storing request info in backend.
+6. Log snippet that are sent directly to user as well as storing request info as log file in backend.
 7. Updated Design Report, Project Management Plan and Gantt chart.
