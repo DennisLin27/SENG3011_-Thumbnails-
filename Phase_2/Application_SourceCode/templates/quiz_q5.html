@@ -3,10 +3,76 @@
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
-
+    <style>
+        .button {
+          border: none;
+          color: white;
+          padding: 15px 32px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          margin: 4px 2px;
+          cursor: pointer;
+        }
+        
+        .button1 {background-color: #4CAF50;} /* Green */
+        .button2 {background-color: #008CBA;} /* Blue */
+    </style>
 
     <body>
+        <h1> How long have you had your symptoms</h1>
+        <button class="button button2" id="1-2 days">1-2 days</button>
+        <button class="button button2" id="3-5 days">3-5 days</button>
+        <button class="button button2" id="5-7 days">5-7 days</button>
+        <button class="button button2" id="1-2 weeks">1-2 weeks</button>
+        <button class="button button2" id="Over 2 weeks">Over 2 weeks</button>
+
         <p><a href="{{ url_for('symptoms') }}">Back!</a></p>
         <p><a href="{{ url_for('additional_info') }}">Next!</a></p>
     </body>
+
+    <script>
+        const button1 = document.getElementById('1-2 days');
+        const button2 = document.getElementById('3-5 days');
+        const button3 = document.getElementById('5-7 days');
+        const button4 = document.getElementById('1-2 weeks');
+        const button5 = document.getElementById('Over 2 weeks');
+
+        button1.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+        button2.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        })
+        button3.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+        button4.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+        button5.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+    </script>
 <html>
