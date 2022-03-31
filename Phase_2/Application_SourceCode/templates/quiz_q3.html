@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" 
+            src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+
+    <body>
+        <label for="Cities">What city are you from?</label>
+        <input name="Cities" list="cities_list" onchange="getSelectedCity(this.value)">
+        <datalist id="cities_list" ></datalist>
+
+        <script>
+            var c = '{{ cities|tojson }}'
+            var cities = $.parseJSON(c);
+            var options = ''
+            for (var i = 0; i < cities.length; i++) {
+                options += '<option value="' + cities[i] + '" />';
+            }
+            document.getElementById('cities_list').innerHTML = options;
+            console.log(cities)
+            
+        </script>
+        <script>
+            function getSelectedCity(val) {
+                console.log(val)
+                $.post( "/location/city", {'city': val});
+            }
+        </script>
+
+        <p><a href="{{ url_for('select_country') }}">Back!</a></p>
+        <p><a href="{{ url_for('symptoms') }}">Next!</a></p>
+	</body>
+<html>
