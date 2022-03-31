@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+
+    <body>
+
+        <label for="Countries"><centre>What country are you from?</centre></label>
+        <input name="Countries" list="countries_list" onchange="getSelectedCountry(this.value)">
+        <datalist id="countries_list" ></datalist>
+        <script>
+            var c = '{{ countries|tojson }}'
+            var countries = $.parseJSON(c);
+            var options = ''
+            for (var i = 0; i < countries.length; i++) {
+                options += '<option value="' + countries[i] + '" />';
+            }
+            document.getElementById('countries_list').innerHTML = options;
+            console.log(countries)
+        </script>
+        <script>
+            function getSelectedCountry(val) {
+                console.log(val)
+                $.post( "/location", {'country': val});
+            }
+        </script>
+        <p><a href="{{ url_for('age') }}">Back!</a></p>
+        <p><a href="{{ url_for('select_city') }}">Next!</a></p>
+	</body>
+<html>
