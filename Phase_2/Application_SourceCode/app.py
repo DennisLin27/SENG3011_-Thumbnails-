@@ -39,8 +39,13 @@ def chemist():
 def doctor():
   return render_template('doctor.html')
 
-@app.route('/age')
+@app.route('/age', methods=['POST', 'GET'])
 def age():
+  if request.method == "POST":
+    age = request.form['age']
+    global collected_data
+    collected_data["age_group"] = age
+    print(age)
   return render_template('quiz_q1.html')
 
 @app.route('/location', methods=['POST', 'GET'])
@@ -64,7 +69,7 @@ def select_city():
     if request.method == "POST":
         cities = get_cities(selected_country)
         #don't remove print statement
-        print(cities[0])
+        print("random city" + cities[0])
         city = request.form['city']
         global collected_data
         collected_data["city"] = city
@@ -72,15 +77,21 @@ def select_city():
     else:
         cities = get_cities(selected_country)
         #don't remove print statement
-        print(cities[0])
+        print("random city:  " + cities[0])
         return render_template('quiz_q3.html', cities=cities)
 
 @app.route('/symptoms')
 def symptoms():
+  
   return render_template('quiz_q4.html')
 
-@app.route('/symptoms/length')
+@app.route('/symptoms/length', methods=['POST', 'GET'])
 def symptoms_length():
+  if request.method == "POST":
+      length = request.form['length']
+      global collected_data
+      collected_data["symptom_length"] = length
+      print(length)
   return render_template('quiz_q5.html')
 
 @app.route('/additionalInfo')
