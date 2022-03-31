@@ -4,9 +4,80 @@
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
 
+    <style>
+    .button {
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+    
+    .button1 {background-color: #4CAF50;} /* Green */
+    .button2 {background-color: #008CBA;} /* Blue */
+    </style>
 
     <body>
+        <h1> What is your age group</h1>
+        <button class="button button2" id="0-10 years">0-10 years</button>
+        <button class="button button2" id="10-20 years">10-20 years</button>
+        <button class="button button2" id="20-35 years">20-35 years</button>
+        <button class="button button2" id="35-60 years">35-60 years</button>
+        <button class="button button2" id="Above 60 years">Above 60 years</button>
+
         <p><a href="{{ url_for('home') }}">home!</a></p>
         <p><a href="{{ url_for('select_country') }}">Next!</a></p>
     </body>
+
+    <script>
+        const button1 = document.getElementById('0-10 years');
+        const button2 = document.getElementById('10-20 years');
+        const button3 = document.getElementById('20-35 years');
+        const button4 = document.getElementById('35-60 years');
+        const button5 = document.getElementById('Above 60 years');
+
+        button1.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const age = this.id
+            console.log(this.id)
+            $.post( "/age", {'age': age});
+        });
+
+        button2.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const age = this.id
+            console.log(this.id)
+            $.post( "/age", {'age': age});
+        });
+
+        button3.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const age = this.id
+            console.log(this.id)
+            $.post( "/age", {'age': age});
+        });
+
+        button4.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const age = this.id
+            console.log(this.id)
+            $.post( "/age", {'age': age});
+        });
+
+        button5.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const age = this.id
+            console.log(this.id)
+            $.post( "/age", {'age': age});
+        });
+    </script>
 <html>
