@@ -20,15 +20,19 @@
     </script>
     <style>
         .button {
-          border: none;
-          color: white;
-          padding: 15px 32px;
-          text-align: center;
-          text-decoration: none;
-          display: inline-block;
-          font-size: 16px;
-          margin: 4px 2px;
-          cursor: pointer;
+            background-color: #C4C4C4;
+            border: none;
+            color: white;
+            width: 250px;
+            height: 100px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 30px;
+            margin: auto auto;
+            margin-top: 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            display: block;  
         }
         
         .button1 {background-color: #4CAF50;} /* Green */
@@ -36,7 +40,7 @@
     </style>
 
     <body>
-        <h1> How long have you had your symptoms</h1>
+        <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> How long have you had your symptoms?</h1>
         <button class="button button2" id="1-2 days">1-2 days</button>
         <button class="button button2" id="3-5 days">3-5 days</button>
         <button class="button button2" id="5-7 days">5-7 days</button>
@@ -88,6 +92,6 @@
             $.post( "/symptoms/length", {'length': length});
         });
     </script>
-    <a class = "left arrow clip" style="position:relative; left:-500px; top:500px;" href="{{ url_for('symptoms') }}"></a>
-    <a class = "right arrow clip" style="position:relative; left:550px; top:500px;" href="{{ url_for('additional_info') }}"></a>
+    <a class = "left arrow clip" style="position:relative; left:200px; top:0px;" href="{{ url_for('symptoms') }}"></a>
+    <a class = "right arrow clip" style="position:relative; left:1250px; top:0px;" href="{{ url_for('additional_info') }}"></a>
 <html>
