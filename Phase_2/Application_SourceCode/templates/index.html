@@ -1,5 +1,6 @@
 <html>
 <link rel="stylesheet" href="static\index.css">
+<link rel="stylesheet" href="static\menu.css">
 <div class="menubar"> </div>
 <div class="hamburger-menu">
     <input id="menu__toggle" type="checkbox" />
@@ -8,6 +9,7 @@
     </label>
 
     <ul class="menu__box">
+      <li><a class="menu__item" href="{{ url_for('home') }}">Home</a></li>
       <li><a class="menu__item" href="{{ url_for('age') }}">Symptom Checker</a></li>
       <li><a class="menu__item" href="{{ url_for('chemist') }}">Chemists</a></li>
       <li><a class="menu__item" href="{{ url_for('doctor') }}">Doctors</a></li>
@@ -17,21 +19,21 @@
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
-    <h1 style="color:white;text-align:center;">Home Page</h1>
+    <h1 style="font-size:300%;font-family:arial;color:white;text-align:center;">Home Page</h1>
     <body>
         <form action="{{ url_for('age') }}">
           <button class ="button" type= "submit"> 
-            Symptom Checker!
+            Symptom Checker
           </button>
         </form>
         <form action="{{ url_for('chemist') }}">
           <button class ="button" type= "submit"> 
-            Find a chemist!
+            Find a chemist
           </button>
         </a>
         <form action="{{ url_for('doctor') }}">
           <button class ="button" type= "submit"> 
-            Find a doctor!
+            Find a doctor
           </button>
         </form>
     </body>
