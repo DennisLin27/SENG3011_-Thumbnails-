@@ -1,0 +1,47 @@
+<html>
+<link rel="stylesheet" href="..\static\menu.css">
+<div class="menubar"> </div>
+<div class="hamburger-menu">
+    <input id="menu__toggle" type="checkbox" />
+    <label class="menu__btn" for="menu__toggle">
+      <span></span>
+    </label>
+
+    <ul class="menu__box">
+      <li><a class="menu__item" href="{{ url_for('home') }}">Home</a></li>
+      <li><a class="menu__item" href="{{ url_for('age') }}">Symptom Checker</a></li>
+      <li><a class="menu__item" href="{{ url_for('chemist') }}">Chemists</a></li>
+      <li><a class="menu__item" href="{{ url_for('doctor') }}">Doctors</a></li>
+    </ul>
+  </div>
+<head>
+    <script type="text/javascript" 
+            src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+
+    <body>
+      <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What city are you from?</h1>
+        <input style="width:35%;position:relative;left:500px;height:60px;font-size:150%" name="Cities" list="cities_list" onchange="getSelectedCity(this.value)">
+        <datalist id="cities_list" ></datalist>
+
+        <script>
+            var c = '{{ cities|tojson }}'
+            var cities = $.parseJSON(c);
+            var options = ''
+            for (var i = 0; i < cities.length; i++) {
+                options += '<option value="' + cities[i] + '" />';
+            }
+            document.getElementById('cities_list').innerHTML = options;
+            console.log(cities)
+            
+        </script>
+        <script>
+            function getSelectedCity(val) {
+                console.log(val)
+                $.post( "/location/city", {'city': val});
+            }
+        </script>
+	</body>
+  <a class = "left arrow clip" style="position:relative; left:-300px; top:500px;" href="{{ url_for('select_country') }}"></a>
+  <a class = "right arrow clip" style="position:relative; left:750px; top:500px;" href="{{ url_for('symptoms') }}"></a>
+<html>

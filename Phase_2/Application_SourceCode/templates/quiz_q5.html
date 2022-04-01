@@ -1,0 +1,97 @@
+<html>
+<link rel="stylesheet" href="..\static\menu.css">
+<div class="menubar"> </div>
+<div class="hamburger-menu">
+    <input id="menu__toggle" type="checkbox" />
+    <label class="menu__btn" for="menu__toggle">
+      <span></span>
+    </label>
+
+    <ul class="menu__box">
+      <li><a class="menu__item" href="{{ url_for('home') }}">Home</a></li>
+      <li><a class="menu__item" href="{{ url_for('age') }}">Symptom Checker</a></li>
+      <li><a class="menu__item" href="{{ url_for('chemist') }}">Chemists</a></li>
+      <li><a class="menu__item" href="{{ url_for('doctor') }}">Doctors</a></li>
+    </ul>
+  </div>
+<head>
+    <script type="text/javascript" 
+            src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
+    </script>
+    <style>
+        .button {
+            background-color: #C4C4C4;
+            border: none;
+            color: white;
+            width: 250px;
+            height: 100px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 30px;
+            margin: auto auto;
+            margin-top: 40px;
+            border-radius: 15px;
+            cursor: pointer;
+            display: block;  
+        }
+        
+        .button1 {background-color: #4CAF50;} /* Green */
+        .button2 {background-color: #008CBA;} /* Blue */
+    </style>
+
+    <body>
+        <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> How long have you had your symptoms?</h1>
+        <button class="button button2" id="1-2 days">1-2 days</button>
+        <button class="button button2" id="3-5 days">3-5 days</button>
+        <button class="button button2" id="5-7 days">5-7 days</button>
+        <button class="button button2" id="1-2 weeks">1-2 weeks</button>
+        <button class="button button2" id="Over 2 weeks">Over 2 weeks</button>
+
+    </body>
+
+    <script>
+        const button1 = document.getElementById('1-2 days');
+        const button2 = document.getElementById('3-5 days');
+        const button3 = document.getElementById('5-7 days');
+        const button4 = document.getElementById('1-2 weeks');
+        const button5 = document.getElementById('Over 2 weeks');
+
+        button1.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+        button2.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        })
+        button3.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+        button4.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+        button5.addEventListener('click', function onClick() {
+            button1.style.backgroundColor = 'salmon';
+            button1.style.color = 'white';
+            const length = this.id
+            console.log(this.id)
+            $.post( "/symptoms/length", {'length': length});
+        });
+    </script>
+    <a class = "left arrow clip" style="position:relative; left:200px; top:0px;" href="{{ url_for('symptoms') }}"></a>
+    <a class = "right arrow clip" style="position:relative; left:1250px; top:0px;" href="{{ url_for('additional_info') }}"></a>
+<html>

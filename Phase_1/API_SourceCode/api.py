@@ -7,6 +7,7 @@ from flask_restx import Api, Resource, reqparse,fields
 import time
 import datetime
 import re
+import logging
   
 cluster = "mongodb+srv://thumbnails:thumbnails@cluster0.lfkm3.mongodb.net/SENG3011?retryWrites=true&w=majority"
 app = Flask(__name__)
@@ -68,11 +69,24 @@ class MainClass(Resource):
         '''Search for all inputs in database'''
         query = collection.find({})
         output = {}
+        resources = {}
         i = 0 
         for x in query:
             output[i] = x
             output[i].pop('_id')
+            resources[i] = output[i]['url']
             i+=1
+            
+        ### log file
+        logging.basicConfig(filename='app.log', filemode='a', format='%(name)s - %(levelname)s - %(message)s')
+        logging.warning('The request belowwill get logged to app.log!')
+        with open("app.log", "a") as logFile:
+            logFile.write('Resources used: \n')
+            for key, value in resources.items():
+                logFile.write('%s:%s\n' % (key, value))
+            logFile.close()
+        ###
+        
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")
         response = {'data': output, 'log': logSnippet}
@@ -129,6 +143,16 @@ class MainClass(Resource):
         if keyterms:
             for term in keyterms:
                 output = get_keyterms(term, output)
+        
+        ### log file
+        logging.basicConfig(filename='app.log', filemode='a', format='%(name)s - %(levelname)s - %(message)s')
+        logging.warning('The request below will get logged to app.log!')
+        with open("app.log", "a") as logFile:
+            logFile.write('Resources used: \n')
+            for x in output:
+                logFile.write(x['url'] + '\n')
+            logFile.close()
+        ###
 
         timeStamp = time.time()
         logSnippet['access_time'] = date = datetime.datetime.fromtimestamp(timeStamp).strftime("%Y-%m-%d %H:%M:%S")

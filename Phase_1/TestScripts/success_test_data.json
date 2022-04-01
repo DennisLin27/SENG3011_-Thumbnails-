@@ -1,0 +1,31 @@
+{
+  "description": "Testing all ebola",
+  "expected_status_code": "200",
+  "returned_status_code": "200",
+  "status": "TEST PASSED"
+}{
+  "description": "Testing all listeria",
+  "expected_status_code": "200",
+  "returned_status_code": "200",
+  "status": "TEST PASSED"
+}{
+  "description": "Testing all results",
+  "expected_status_code": "200",
+  "returned_status_code": "200",
+  "status": "TEST PASSED"
+}{
+  "description": "Testing location: New York",
+  "expected_status_code": "200",
+  "returned_status_code": "200",
+  "status": "TEST PASSED"
+}{
+  "description": "Testing keyword: deli",
+  "expected_status_code": "200",
+  "returned_status_code": "200",
+  "status": "TEST PASSED"
+}{
+  "description": "Testing keyword: Listeria, Queso",
+  "expected_status_code": "200",
+  "returned_status_code": "200",
+  "status": "TEST PASSED"
+}

@@ -1,0 +1,39 @@
+root - WARNING - The request below will get logged to app.log!
+Resources used: 
+https://www.cdc.gov/listeria/outbreaks/hispanic-soft-cheese-02-21/index.html
+werkzeug - INFO - 127.0.0.1 - - [18/Mar/2022 15:27:16] "GET /findstart_date=2010-03-04T00:00:00&end_date=2022-1-05T00:00:00&location=new%20york&keyterms=listeria,queso HTTP/1.1" 200 -
+root - WARNING - The request below will get logged to app.log!
+Resources used: 
+0:https://www.cdc.gov/listeria/outbreaks/packaged-salad-12-21-b/index.html
+1:https://www.cdc.gov/listeria/outbreaks/packaged-salad-mix-12-21/index.html
+2:https://www.cdc.gov/listeria/outbreaks/precooked-chicken-07-21/index.html
+3:https://www.cdc.gov/listeria/outbreaks/hispanic-soft-cheese-02-21/index.html
+4:https://www.cdc.gov/listeria/outbreaks/delimeat-10-20/index.html
+5:https://www.cdc.gov/listeria/outbreaks/enoki-mushrooms-03-20/index.html
+6:https://www.cdc.gov/listeria/outbreaks/eggs-12-19/index.html
+7:https://www.cdc.gov/listeria/outbreaks/monocytogenes-08-19/index.html
+8:https://www.cdc.gov/listeria/outbreaks/deliproducts-04-19/index.html
+9:https://www.cdc.gov/listeria/outbreaks/porkproducts-11-18/index.html
+10:https://www.cdc.gov/listeria/outbreaks/countryham-10-18/index.html
+11:https://www.cdc.gov/listeria/outbreaks/soft-cheese-03-17/index.html
+12:https://www.cdc.gov/listeria/outbreaks/frozen-vegetables-05-16/index.html
+13:https://www.cdc.gov/listeria/outbreaks/raw-milk-03-16/index.html
+14:https://www.cdc.gov/listeria/outbreaks/bagged-salads-01-16/index.html
+15:https://www.cdc.gov/listeria/outbreaks/soft-cheeses-09-15/index.html
+16:https://www.cdc.gov/listeria/outbreaks/ice-cream-03-15/index.html
+17:https://www.cdc.gov/listeria/outbreaks/caramel-apples-12-14/index.html
+18:https://www.cdc.gov/listeria/outbreaks/cheese-10-14/index.html
+19:https://www.cdc.gov/listeria/outbreaks/bean-sprouts-11-14/index.html
+20:https://www.cdc.gov/listeria/outbreaks/cheese-02-14/index.html
+21:https://www.cdc.gov/listeria/outbreaks/cheese-07-13/index.html
+22:https://www.cdc.gov/listeria/outbreaks/cheese-09-12/index.html
+23:https://www.cdc.gov/listeria/outbreaks/cantaloupes-jensen-farms/index.html
+24:https://www.cdc.gov/vhf/ebola/outbreaks/drc/2017-may.html
+25:https://www.cdc.gov/vhf/ebola/outbreaks/drc/2014-august.html
+26:https://www.cdc.gov/vhf/ebola/outbreaks/drc/2021-oct.html
+27:https://www.cdc.gov/vhf/ebola/outbreaks/drc/2021-february.html
+28:https://www.cdc.gov/vhf/ebola/outbreaks/drc/2020-june.html
+29:https://www.cdc.gov/vhf/ebola/outbreaks/drc/2018-august.html
+30:https://www.cdc.gov/vhf/ebola/outbreaks/drc/2018-may.html
+werkzeug - INFO - 127.0.0.1 - - [18/Mar/2022 15:27:28] "GET /findAll HTTP/1.1" 200 -
+werkzeug - INFO - 127.0.0.1 - - [18/Mar/2022 15:32:51] "GET //find/keytermsqueso HTTP/1.1" 200 -
