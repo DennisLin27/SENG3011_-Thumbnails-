@@ -1,6 +1,8 @@
 import requests
 from flask import Flask, render_template, request, jsonify
 import json
+import disease_symptoms
+import urllib
 
 app = Flask(__name__)
 
@@ -80,10 +82,14 @@ def select_city():
         print("random city:  " + cities[0])
         return render_template('quiz_q3.html', cities=cities)
 
-@app.route('/symptoms')
+@app.route('/symptoms', methods=['POST', 'GET'])
 def symptoms():
-  
-  return render_template('quiz_q4.html')
+  if request.method == "POST":
+    symptoms = disease_symptoms.get_symptoms()
+    return render_template('quiz_q4.html', symptoms=symptoms)
+  else:
+    symptoms = disease_symptoms.get_symptoms()
+  return render_template('quiz_q4.html', symptoms=symptoms)
 
 @app.route('/symptoms/length', methods=['POST', 'GET'])
 def symptoms_length():
@@ -94,9 +100,17 @@ def symptoms_length():
       print(length)
   return render_template('quiz_q5.html')
 
-@app.route('/additionalInfo')
+@app.route('/additionalInfo', methods=['POST', 'GET'])
 def additional_info():
-  return render_template('quiz_q6.html')
+  if request.method == "POST":
+      additional_info = request.form['data']
+      additional_info = urllib.parse.unquote(additional_info)
+      print(additional_info)
+      global collected_data
+      collected_data["additional_info"] = additional_info
+      return render_template('quiz_q6.html')
+  else:
+    return render_template('quiz_q6.html')
 
 @app.route('/diseaseReport')
 def disease_report():
