@@ -19,8 +19,20 @@
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
 
-
     <body>
+      <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> Anything else we should know?</h1>
+      <form style="width:35%;position:relative;left:500px;height:60px;font-size:150%">
+          <textarea id="text"name="myTextBox" cols="50" rows="5">
+          </textarea>
+          <br></br>
+          <input type="submit" onclick="getdata((document.getElementById('text').value))"/>
+        </form>
+      <script>
+        function getdata(value) {
+          console.log(value)
+          $.post( "/additionalInfo", {'data': value});
+        }
+      </script>
     </body>
   <a class = "left arrow clip" style="position:relative; left:200px; top:500px;" href="{{ url_for('symptoms_length') }}"></a>
   <a class = "right arrow clip" style="position:relative; left:1250px; top:500px;" href="{{ url_for('disease_report') }}"></a>
