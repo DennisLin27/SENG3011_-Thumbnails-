@@ -1,8 +1,10 @@
 import requests
 from flask import Flask, render_template, request, jsonify
-import json
 import disease_symptoms
 import urllib
+import hmac, hashlib
+import enum 
+import base64
 
 app = Flask(__name__)
 
@@ -116,5 +118,33 @@ def additional_info():
 def disease_report():
   return render_template('disease_report.html')
 
+@app.route('/results')
+def index():
+    username = 'z5234001@ad.unsw.edu.au'
+    url = 'https://sandbox-authservice.priaid.ch/login'
+    password = 'r6KSm24LbMa78Tfd5'
+    rawHashString = hmac.new(bytes(password, encoding='utf-8'),url.encode('utf-8')).digest()
+    computedHashString = base64.b64encode(rawHashString).decode()
+    bearer_creds = username + ':' + computedHashString
+    postHeaders = {
+        'Authorization': 'Bearer {}'.format(bearer_creds)
+    }
+    responsePost = requests.post(url,headers=postHeaders)
+    data = json.loads(responsePost.text)
+    #print(data['Token'])
+
+    parameters2 = {
+        "token": data['Token'],
+        "symptoms": json.dumps([10,11,12]), 
+        "gender": 'male', 
+        "year_of_birth": 1988,
+        "language" : 'en-gb',
+        "format": 'json'
+    }
+
+    response = requests.get("https://sandbox-healthservice.priaid.ch/diagnosis", params=parameters2)
+    fvar= json.dumps(response.json(),indent=4)
+
+    return render_template('results.html', variable=fvar)
 if __name__ == '__main__':
   app.run(debug=True, host='localhost')
