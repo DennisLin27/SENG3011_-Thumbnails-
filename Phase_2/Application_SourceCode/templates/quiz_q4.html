@@ -20,7 +20,7 @@
     </script>
 
     <body>
-      <h1>What are your symptoms</h1>
+      <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What are your symptoms?</h1>
 
      <div id="divid"> </div>
      <script type="text/javascript">
@@ -28,8 +28,8 @@
         var symptoms = $.parseJSON(s);
         
         for (var i = 0; i < symptoms.length; i++) {
-                create(symptoms[i]);
-          }
+          create(symptoms[i]);
+        }
 
        function create(name) {
          var hold = document.getElementById("divid");
