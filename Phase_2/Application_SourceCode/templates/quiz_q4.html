@@ -20,7 +20,7 @@
     </script>
 
     <body>
-      <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What are your symptoms?</h1>
+      <h1 style="font-size:250%;font-family:Arial;color:white;text-align:center;"> What are your symptoms?</h1>
 
      <div id="divid"> </div>
      <script type="text/javascript">
@@ -37,9 +37,11 @@
          checkbox.type = "checkbox";
          checkbox.name = "chkbox1";
          checkbox.id = "cbid";
+         checkbox.style.cssText += "width: 35px;height: 35px;display:block;position:relative; left:1000px;top:-35px;";
          var label = document.createElement('label');
          var tn = document.createTextNode(name);
          label.htmlFor="cbid";
+         label.style.cssText += "length:20px;text-align:center;font-size: 30px;display: block;font-family: Arial;";
          label.appendChild(tn); 
          hold.appendChild(label);
          hold.appendChild(checkbox);
