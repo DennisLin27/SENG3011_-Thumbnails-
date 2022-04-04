@@ -141,13 +141,27 @@ def disease_report():
     response = requests.get("https://sandbox-healthservice.priaid.ch/diagnosis", params=parameters2)
     response = response.json()
     results = []
+
+    api_response = requests.get('http://13.52.98.118/articles?key_term=flu&location=Australia&start_date=1900-03-03%2000%3A00%3A00&end_date=2022-03-03%2000%3A00%3A00&limit=1')
+    api_response = api_response.json()
+
     for r in response:
       new_dict = {}
       new_dict["Name"] = r["Issue"]["Name"]
       new_dict["Accuracy"] = str(int(r["Issue"]["Accuracy"])) + "% match to your symptoms!"
-      new_dict["Country"] = "Disease found in country:"
-      new_dict["Description"] = "Article description:"
-      new_dict["Links"] = "links:"
+      try:
+        key_term = r["Issue"]["Name"]
+        if (key_term == "Listeria infection"):
+          key_term = "listeriosis"
+        api_response = requests.get('http://13.52.98.118/articles?key_term='+str(key_term)+'&location=Australia&start_date=1900-03-03%2000%3A00%3A00&end_date=2022-03-03%2000%3A00%3A00&limit=1')
+        api_response = api_response.json()[0]
+        new_dict["Country"] = "Outbreaks near " + api_response["country"]
+        new_dict["Description"] = api_response["description"]
+        new_dict["Links"] = api_response["links"][0] 
+      except:
+        new_dict["Country"] = "Disease found in country:"
+        new_dict["Description"] = "Article description:"
+        new_dict["Links"] = "links:"
       results.append(new_dict)
     print(results)
     return render_template('disease_report.html', results=results)
