@@ -15,12 +15,72 @@
     </ul>
   </div>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+</style>
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
-
-
+</head>
     <body>
-        <p><a href="{{ url_for('home') }}">Home!</a></p>
+        <p>Disease reports based on your symptoms:</p>
+        <div id="data">
+          <!-- all divs will append here -->
+       </div>
+        <script>
+            var d = '{{ results|tojson }}'
+            var diseases = $.parseJSON(d);
+
+            for(var i = 0; i < diseases.length; i++) {
+              var obj = diseases[i];
+              console.log(obj.Name)
+            }
+
+            var options = ''
+            for (var i = 0; i < diseases.length; i++) {
+                obj = diseases[i]
+                options += '<button class="collapsible">' + obj.Name + ' - ' + obj.Accuracy +'</button><div class="content"><p>' + obj.Country +'<br>'+ obj.Description +'<br>' + obj.Links + '<br>'+ '</p></div>'
+            }
+            document.getElementById('data').innerHTML = options;
+        </script>
+        <script>
+        var coll = document.getElementById("data").getElementsByClassName("collapsible")
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight){
+              content.style.maxHeight = null;
+            } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+            }
+          });
+        }
+        </script>
     </body>
 <html>
