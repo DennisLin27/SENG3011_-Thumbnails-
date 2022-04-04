@@ -24,7 +24,7 @@
   padding: 25px;
   width: 70%;
   border: none;
-  text-align: center;
+  /*text-align: center;*/
   left: 225px;
   position: relative;
   outline: none;
@@ -41,7 +41,7 @@
   max-height: 0;
   overflow: hidden;
   width: 67.5%;
-  text-align: center;
+  /*text-align: center*/;
   position: relative;
   left: 225px;
   font-size: 20px;
@@ -70,7 +70,10 @@
             var options = ''
             for (var i = 0; i < diseases.length; i++) {
                 obj = diseases[i]
-                options += '<button class="collapsible">' + obj.Name + ' - ' + obj.Accuracy +'</button><div class="content"><p>' + obj.Country +'<br>'+ obj.Description +'<br>' + obj.Links + '<br>'+ '</p></div>'
+                var str1 = '<button class="collapsible">' + obj.Name + ' - ' + obj.Accuracy +'</button><div class="content"><p><h2>'
+                var str2 = obj.Country +'</h2><h4>'+ obj.Description +'</h4><a href="' + obj.Links + '">' + obj.Links + '</a><br><br>'+ '</p></div>'
+                var final_str = str1 + str2
+                options +=  final_str
             }
             document.getElementById('data').innerHTML = options;
         </script>
