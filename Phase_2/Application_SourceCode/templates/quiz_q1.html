@@ -29,23 +29,41 @@
         text-align: center;
         text-decoration: none;
         font-size: 30px;
-        margin: auto auto;
-        margin-top: 40px;
         border-radius: 15px;
-        cursor: pointer;
-        display: block;  
-        }
+        cursor: pointer; 
+        position: fixed;
+    }
+    .bp1 {
+        left: 300px;
+        top: 200px;
+    }
+    .bp2 {
+        left: 650px;
+        top: 200px;
+    }
+    .bp3 {
+        left: 1000px;
+        top: 200px;
+    }
+    .bp4 {
+        left: 450px;
+        top: 400px;
+    }
+    .bp5 {
+        left: 900px;
+        top: 400px;
+    }
     
     .button1 {background-color: #4CAF50;} /* Green */
     .button2 {background-color: #008CBA;} /* Blue */
     </style>
     <body>
         <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What is your age group?</h1>
-        <button class="button button2" id="0-10 years">0-10 years</button>
-        <button class="button button2" id="10-20 years">10-20 years</button>
-        <button class="button button2" id="20-35 years">20-35 years</button>
-        <button class="button button2" id="35-60 years">35-60 years</button>
-        <button class="button button2" id="Above 60 years">Above 60 years</button>
+        <button class="button button2 bp1" id="0-10 years">0-10 years</button>
+        <button class="button button2 bp2" id="10-20 years">10-20 years</button>
+        <button class="button button2 bp3" id="20-35 years">20-35 years</button>
+        <button class="button button2 bp4" id="35-60 years">35-60 years</button>
+        <button class="button button2 bp5" id="Above 60 years">Above 60 years</button>
 
     <script>
         const button1 = document.getElementById('0-10 years');
@@ -94,5 +112,5 @@
             $.post( "/age", {'age': age});
         });
     </script>
-    <a class = "right arrow clip" style="position:relative; left:1300px; top:0px;" href="{{ url_for('select_country') }}"></a>
+    <a class = "right arrow clip" style="position:fixed; left:1300px; top:600px;" href="{{ url_for('select_country') }}"></a>
 <html>
