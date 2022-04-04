@@ -1,3 +1,4 @@
+from tkinter import Variable
 import requests
 from flask import Flask, render_template, request, jsonify
 import disease_symptoms
@@ -117,10 +118,6 @@ def additional_info():
 
 @app.route('/diseaseReport')
 def disease_report():
-  return render_template('disease_report.html')
-
-@app.route('/results')
-def index():
     username = 'z5234001@ad.unsw.edu.au'
     url = 'https://sandbox-authservice.priaid.ch/login'
     password = 'r6KSm24LbMa78Tfd5'
@@ -132,7 +129,6 @@ def index():
     }
     responsePost = requests.post(url,headers=postHeaders)
     data = json.loads(responsePost.text)
-    #print(data['Token'])
 
     parameters2 = {
         "token": data['Token'],
@@ -142,11 +138,19 @@ def index():
         "language" : 'en-gb',
         "format": 'json'
     }
-
     response = requests.get("https://sandbox-healthservice.priaid.ch/diagnosis", params=parameters2)
-    print(response)
-    fvar= json.dumps(response.json(),indent=4)
+    response = response.json()
+    results = []
+    for r in response:
+      new_dict = {}
+      new_dict["Name"] = r["Issue"]["Name"]
+      new_dict["Accuracy"] = str(int(r["Issue"]["Accuracy"])) + "% match to your symptoms!"
+      new_dict["Country"] = "Disease found in country:"
+      new_dict["Description"] = "Article description:"
+      new_dict["Links"] = "links:"
+      results.append(new_dict)
+    print(results)
+    return render_template('disease_report.html', results=results)
 
-    return render_template('results.html', variable=fvar)
 if __name__ == '__main__':
   app.run(debug=True, host='localhost')
