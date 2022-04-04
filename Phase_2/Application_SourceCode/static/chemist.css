@@ -1,13 +1,27 @@
+#main{
+  background-color: #ffffff;
+  margin: auto;
+  padding:0cm;
+  align-content: center;
+}
+
 .search {
-  position: fixed;
-  left: 90px;
-  padding: 10px 45% 10px 30px;
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 10px;
+  height: 35px;
   background-color: #3a912d;
 }
 
 #map{
-    height:400px;
-    top: 100px;
-    left: 90px;
-    width:65%;
+    height: 600px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.search input[type=text] {
+  float: left;
+  width: 450px;
+  padding: 6px;
+  font-size: 17px;
 }

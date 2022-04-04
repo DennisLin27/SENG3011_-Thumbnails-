@@ -52,7 +52,7 @@
           map.fitBounds(place.geometry.viewport);
           } else {
           map.setCenter(place.geometry.location);
-          map.setZoom(14);
+          map.setZoom(15);
           }
 
           //marker.setPosition(place.geometry.location);
@@ -64,7 +64,7 @@
 
           createAnchor(place)
           searchNearby(place)
-          map.setZoom(14)
+          map.setZoom(15)
       });
 
     }
@@ -112,7 +112,7 @@
   </script>
 </head>
 <body>
-  <div class="menubar"> </div>
+  <div class="menubar">
     <input id="menu__toggle" type="checkbox" />
     <label class="menu__btn" for="menu__toggle">
       <span></span>
@@ -127,12 +127,11 @@
   </div>
   <p><a href="{{ url_for('home') }}">Home!</a></p>
   <div class="search">
-    <div id="title">Autocomplete search</div>
-    <br>
     <div id="pac-container">
-        <input id="pac-input" type="text" placeholder="Enter a location" />
+        <input id="pac-input" type="text" placeholder="Enter an address..." />
     </div>
   </div>
+  <br><br><br><br><br>
   <div id="map"></div>
   <div id="infowindow-content">
   <span id="place-name" class="title"></span><br />

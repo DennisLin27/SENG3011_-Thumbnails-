@@ -43,7 +43,7 @@ function initMap() {
         map.fitBounds(place.geometry.viewport);
         } else {
         map.setCenter(place.geometry.location);
-        map.setZoom(13);
+        map.setZoom(15);
         }
 
         //marker.setPosition(place.geometry.location);
@@ -55,7 +55,7 @@ function initMap() {
 
         createAnchor(place)
         searchNearby(place)
-        map.setZoom(13)
+        map.setZoom(15)
     });
 
 }
