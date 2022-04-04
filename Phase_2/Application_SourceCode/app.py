@@ -5,6 +5,7 @@ import urllib
 import hmac, hashlib
 import enum 
 import base64
+import json
 
 app = Flask(__name__)
 
@@ -123,7 +124,7 @@ def index():
     username = 'z5234001@ad.unsw.edu.au'
     url = 'https://sandbox-authservice.priaid.ch/login'
     password = 'r6KSm24LbMa78Tfd5'
-    rawHashString = hmac.new(bytes(password, encoding='utf-8'),url.encode('utf-8')).digest()
+    rawHashString = hmac.new(bytes(password, encoding='utf-8'),(url.encode('utf-8')), digestmod=hashlib.md5).digest()
     computedHashString = base64.b64encode(rawHashString).decode()
     bearer_creds = username + ':' + computedHashString
     postHeaders = {
@@ -143,6 +144,7 @@ def index():
     }
 
     response = requests.get("https://sandbox-healthservice.priaid.ch/diagnosis", params=parameters2)
+    print(response)
     fvar= json.dumps(response.json(),indent=4)
 
     return render_template('results.html', variable=fvar)
