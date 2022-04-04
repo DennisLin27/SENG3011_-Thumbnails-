@@ -21,11 +21,11 @@
 
     <body>
       <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> Anything else we should know?</h1>
-      <form style="width:35%;position:relative;left:500px;height:60px;font-size:150%">
-          <textarea id="text"name="myTextBox" cols="50" rows="5">
+      <form style="width:40%;position:relative;left:450px;font-size:150%">
+          <textarea style="background:-color:C4C4C4;width:100%;position:relative;left:0px;height:200px;font-size:150%;border-radius: 15px;" id="text"name="myTextBox" cols="50" rows="5">
           </textarea>
           <br></br>
-          <input type="submit" onclick="getdata((document.getElementById('text').value))"/>
+          <input style="background-color: salmon;border: none;color: white;font-weight:700;font-size:15px;width:100px;height: 50px;text-align: center;border-radius: 15px;"type="submit" onclick="getdata((document.getElementById('text').value))"/>
         </form>
       <script>
         function getdata(value) {
@@ -34,6 +34,6 @@
         }
       </script>
     </body>
-  <a class = "left arrow clip" style="position:relative; left:200px; top:500px;" href="{{ url_for('symptoms_length') }}"></a>
-  <a class = "right arrow clip" style="position:relative; left:1250px; top:500px;" href="{{ url_for('disease_report') }}"></a>
+  <a class = "left arrow clip" style="position:fixed; left:200px; top:600px;" href="{{ url_for('symptoms_length') }}"></a>
+  <a class = "right arrow clip" style="position:fixed; left:1300px; top:600px;" href="{{ url_for('disease_report') }}"></a>
 <html>
