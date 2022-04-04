@@ -22,7 +22,7 @@
   width: 26px;
   height: 26px;
   cursor: pointer;
-  z-index: 11;
+  z-index: 1;
 }
 .menu__btn > span,
 .menu__btn > span::before,
@@ -55,7 +55,6 @@
   background-color: #2D3391;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, .4);
   transition-duration: .25s;
-  z-index: 10;
 }
 .menu__item {
   display: block;
