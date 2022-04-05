@@ -110,6 +110,7 @@
     }
 
   </script>
+  <title>Find a Chemist</title>
 </head>
 <body>
   <div class="menubar">
@@ -126,11 +127,14 @@
     </ul>
   </div>
   <p><a href="{{ url_for('home') }}">Home!</a></p>
-  <div class="search">
-    <div id="pac-container">
-        <input id="pac-input" type="text" placeholder="Enter an address..." />
-    </div>
+  <div id="header">
+    <h1>Find a Chemist</h1>
   </div>
+  <div class="search">
+  <div id="pac-container">
+      <input id="pac-input" type="text" placeholder="Enter an address..." />
+  </div>
+</div>
   <br><br><br><br><br>
   <div id="map"></div>
   <div id="infowindow-content">

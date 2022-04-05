@@ -18,29 +18,31 @@
     <script type="text/javascript"
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
+    <title>Symptom Checker</title>
+</head> 
 
-    <body>
+<body>
 
-      <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What country are you from?</h1>
-        <input style="width:35%;position:relative;left:500px;height:60px;font-size:150%" name="Countries" list="countries_list" onchange="getSelectedCountry(this.value)">
-        <datalist id="countries_list" ></datalist>
-        <script>
-            var c = '{{ countries|tojson }}'
-            var countries = $.parseJSON(c);
-            var options = ''
-            for (var i = 0; i < countries.length; i++) {
-                options += '<option value="' + countries[i] + '" />';
-            }
-            document.getElementById('countries_list').innerHTML = options;
-            console.log(countries)
-        </script>
-        <script>
-            function getSelectedCountry(val) {
-                console.log(val)
-                $.post( "/location", {'country': val});
-            }
-        </script>
-	</body>
+  <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What country are you from?</h1>
+  <input style="width:35%;position:relative;left:500px;height:60px;font-size:150%" name="Countries" list="countries_list" onchange="getSelectedCountry(this.value)">
+  <datalist id="countries_list" ></datalist>
+  <script>
+      var c = '{{ countries|tojson }}'
+      var countries = $.parseJSON(c);
+      var options = ''
+      for (var i = 0; i < countries.length; i++) {
+          options += '<option value="' + countries[i] + '" />';
+      }
+      document.getElementById('countries_list').innerHTML = options;
+      console.log(countries)
+  </script>
+  <script>
+      function getSelectedCountry(val) {
+          console.log(val)
+          $.post( "/location", {'country': val});
+      }
+  </script>
+</body>
   <a class = "left arrow clip" style="position:fixed; left:200px; top:600px;" href="{{ url_for('age') }}"></a>
   <a class = "right arrow clip" style="position:fixed; left:1300px; top:600px;" href="{{ url_for('select_city') }}"></a>
 <html>

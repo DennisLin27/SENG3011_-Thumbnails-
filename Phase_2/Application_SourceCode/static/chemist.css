@@ -14,9 +14,9 @@
 }
 
 #map{
-    height: 600px;
-    margin-left: 10%;
-    margin-right: 10%;
+  height: 600px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .search input[type=text] {
@@ -24,4 +24,9 @@
   width: 450px;
   padding: 6px;
   font-size: 17px;
+}
+
+#header{
+  font-size: 17px;
+  margin-left: 10%;
 }
