@@ -18,7 +18,6 @@
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
-    <title>Symptom Checker</title>
 
     <body>
       <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> Anything else we should know?</h1>
@@ -26,7 +25,9 @@
           <textarea style="background:-color:C4C4C4;width:100%;position:relative;left:0px;height:200px;font-size:150%;border-radius: 15px;" id="text"name="myTextBox" cols="50" rows="5">
           </textarea>
           <br></br>
-          <input style="background-color: salmon;border: none;color: white;font-weight:700;font-size:15px;width:100px;height: 50px;text-align: center;border-radius: 15px;"type="submit" onclick="getdata((document.getElementById('text').value))"/>
+          <a href = "{{ url_for('disease_report') }}">
+          <input style="background-color: salmon;border: none;color: white;font-weight:700;font-size:15px;width:100px;height: 50px;text-align: center;border-radius: 15px;"type="button" value="Submit" onclick="getdata((document.getElementById('text').value))"/>
+        </ahref>
         </form>
       <script>
         function getdata(value) {
