@@ -36,7 +36,7 @@
          var hold = document.getElementById("divid");
          var checkbox = document.createElement('input');
          checkbox.type = "checkbox";
-         checkbox.name = "chkbox1";
+         checkbox.name = name;
          checkbox.id = "cbid";
          checkbox.style.cssText += "width: 35px;height: 35px;display:block;position:relative; left:1000px;top:-35px;";
          var label = document.createElement('label');
@@ -50,14 +50,17 @@
       </script> 
 
       <script>
-        var vehicles = [];
-        $("input:checked").each(function() {
-          vehicles.push($(this).val());
-        });
+        function getSymptoms() {
+          var symptom = [];
+          $("input:checked").each(function() {
+            symptom.push(this.name);
+          });
 
-        console.log(vehicles);
+          console.log(symptom);
+          $.post( "/symptoms", {'symptoms': JSON.stringify(symptom)});
+      }
       </script>
     </body>
       <a class = "left arrow clip" style="position:fixed; left:200px; top:600px;" href="{{ url_for('select_city') }}"></a>
-  <a class = "right arrow clip" style="position:fixed; left:1300px; top:600px;" href="{{ url_for('symptoms_length') }}"></a>
+  <a class = "right arrow clip" style="position:fixed; left:1300px; top:600px;" href="{{ url_for('symptoms_length') }}" onclick="getSymptoms()"></a>
 <html>
