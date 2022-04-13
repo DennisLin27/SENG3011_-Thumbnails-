@@ -172,11 +172,11 @@ def disease_report():
     response = requests.get("https://sandbox-healthservice.priaid.ch/diagnosis", params=parameters2)
     response = response.json()
     results = []
-
     api_response = requests.get('http://13.52.98.118/articles?key_term=flu&location=Australia&start_date=1900-03-03%2000%3A00%3A00&end_date=2022-03-03%2000%3A00%3A00&limit=1')
     api_response = api_response.json()
 
     for r in response:
+      print(r)
       new_dict = {}
       new_dict["Name"] = r["Issue"]["Name"]
       new_dict["Accuracy"] = str(int(r["Issue"]["Accuracy"])) + "% match to your symptoms!"
@@ -194,7 +194,8 @@ def disease_report():
         new_dict["Description"] = "Article description:"
         new_dict["Links"] = "links:"
       results.append(new_dict)
-    print(results)
+    #print(results)
+    
     return render_template('disease_report.html', results=results)
 
 if __name__ == '__main__':
