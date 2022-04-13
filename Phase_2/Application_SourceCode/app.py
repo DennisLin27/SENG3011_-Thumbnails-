@@ -1,3 +1,4 @@
+from distutils.log import info
 from tkinter import Variable
 import requests
 from flask import Flask, render_template, request, jsonify
@@ -7,11 +8,12 @@ import hmac, hashlib
 import enum 
 import base64
 import json
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, select, func
 
 app = Flask(__name__)
 
 #list of all countries
-def all_countries():
+def get_all_countries():
   page = requests.get("https://countriesnow.space/api/v0.1/countries")
   data = page.json()["data"]
   countries = []
@@ -29,9 +31,30 @@ def get_cities(country_given):
     if (country == country_given):
       return cities
 
+all_countries = get_all_countries()
 selected_country = ""
 collected_data = {}
+collected_data["age_group"] = ""
+collected_data["country"] = ""
+collected_data["city"] = ""
+collected_data["symptoms"] = []
+collected_data["symptoms_length"] = ""
+collected_data["additional_info"] = ""
 
+#create database
+meta = MetaData()
+engine = create_engine('sqlite:///FormInfo.db', echo = True)
+Info = Table(
+    'actors', meta,
+    Column('id', Integer, primary_key = True, autoincrement=True),
+    Column('age_group', String),
+    Column('country', String),
+    Column('city', String),
+    Column('symptoms', String),
+    Column('symptoms_length', String),
+    Column('additional_info', String),
+)
+meta.create_all(engine)
 
 @app.route('/')
 def home():
@@ -56,8 +79,9 @@ def age():
 
 @app.route('/location', methods=['POST', 'GET'])
 def select_country():
+    global all_countries
     if request.method == "POST":
-        countries = all_countries()
+        countries = all_countries
         global selected_country
         selected_country = request.form['country']
         global collected_data
@@ -66,7 +90,7 @@ def select_country():
         print(selected_country)
         return render_template('quiz_q2.html', countries=countries)
     else:
-        countries = all_countries()
+        countries = all_countries
         return render_template('quiz_q2.html', countries=countries)
 
 @app.route('/location/city', methods=['POST', 'GET'])
@@ -90,6 +114,9 @@ def select_city():
 def symptoms():
   if request.method == "POST":
     symptoms = disease_symptoms.get_symptoms()
+    symptoms_returned = request.form['symptoms']
+    global collected_data
+    collected_data["symptoms"] = list(json.loads(symptoms_returned))
     return render_template('quiz_q4.html', symptoms=symptoms)
   else:
     symptoms = disease_symptoms.get_symptoms()
@@ -108,10 +135,14 @@ def symptoms_length():
 def additional_info():
   if request.method == "POST":
       additional_info = request.form['data']
-      additional_info = urllib.parse.unquote(additional_info)
+      additional_info = (urllib.parse.unquote(additional_info)).strip()
       print(additional_info)
       global collected_data
       collected_data["additional_info"] = additional_info
+      db_data = collected_data
+      db_data["symptoms"] = ",".join(db_data["symptoms"])
+      conn = engine.connect()
+      conn.execute(Info.insert(), [db_data])
       return render_template('quiz_q6.html')
   else:
     return render_template('quiz_q6.html')
