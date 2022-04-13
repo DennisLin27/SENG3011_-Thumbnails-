@@ -1,5 +1,6 @@
 <html>
 <link rel="stylesheet" href="static\menu.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="menubar"> </div>
 <div class="hamburger-menu">
     <input id="menu__toggle" type="checkbox" />
@@ -48,13 +49,57 @@
   transition: max-height 0.2s ease-out;
   background-color: #f1f1f1;
 }
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
 </style>
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
 </head>
     <body>
+        <div id = "info">
         <h1 style="font-size:250%;font-family:Arial;color:white;text-align:center;"> Reports based on your symptoms:</h1>
+          <div id = "expand" style="text-align:center;padding-left: 68%;">
+          <div class="tooltip"><i class="fa fa-info-circle" style="font-size:20px;"></i>
+            <span class="tooltiptext">Please consult a health professional to confirm diagnosis!</span>
+          </div> 
+        </div>
+        </div>
         <div id="data">
           <!-- all divs will append here -->
        </div>
