@@ -20,12 +20,44 @@
     </script>
     <title>Symptom Checker</title>
 </head> 
+<style>
+   
+  .dot {
+        height: 25px;
+        width: 25px;
+        margin-left: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-top: 420px;
+    }
+
+    div1 {
+        margin-left: 640px;
+    }
+
+    #filled {
+        background-color:rgb(91, 189, 156);
+    }
+    #unfilled {
+        background-color: aliceblue;
+    }
+</style> 
 
 <body>
-
   <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What country are you from?</h1>
   <input style="width:35%;position:relative;left:500px;height:60px;font-size:150%" name="Countries" list="countries_list" onchange="getSelectedCountry(this.value)">
-  <datalist id="countries_list" ></datalist>
+  <div>
+    <datalist id="countries_list" ></datalist>
+  </div>
+  <div1>
+    <span class="dot" id="filled"></span>
+    <span class="dot" id="filled"></span>
+    <span class="dot" id="unfilled"></span>
+    <span class="dot" id="unfilled"></span>
+    <span class="dot" id="unfilled"></span>
+    <span class="dot" id="unfilled"></span>
+  </div1>
+
   <script>
       var c = '{{ countries|tojson }}'
       var countries = $.parseJSON(c);

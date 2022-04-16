@@ -1,5 +1,6 @@
 from distutils.log import info
 from tkinter import Variable
+from matplotlib.font_manager import json_dump
 import requests
 from flask import Flask, render_template, request, jsonify
 import disease_symptoms
@@ -169,6 +170,7 @@ def disease_report():
         "language" : 'en-gb',
         "format": 'json'
     }
+
     response = requests.get("https://sandbox-healthservice.priaid.ch/diagnosis", params=parameters2)
     response = response.json()
     results = []
@@ -196,6 +198,7 @@ def disease_report():
       results.append(new_dict)
     print(results)
     return render_template('disease_report.html', results=results)
+
 
 if __name__ == '__main__':
   app.run(debug=True, host='localhost')

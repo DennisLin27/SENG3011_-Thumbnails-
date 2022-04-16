@@ -54,19 +54,48 @@
         left: 900px;
         top: 400px;
     }
+    .dot {
+        height: 25px;
+        width: 25px;
+        margin-left: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-top: 500px;
+    }
+
+    div1 {
+       
+        margin-left: 640px;
+    }
+
+    #filled {
+        background-color:rgb(91, 189, 156);
+    }
+    #unfilled {
+        background-color: aliceblue;
+    }
     
     .button1 {background-color: #4CAF50;} /* Green */
     </style>
     <body>
         <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What is your age group?</h1>
-        <div class = buttons>
+        <div1>
+            <span class="dot" id="filled"></span>
+            <span class="dot" id="unfilled"></span>
+            <span class="dot" id="unfilled"></span>
+            <span class="dot" id="unfilled"></span>
+            <span class="dot" id="unfilled"></span>
+            <span class="dot" id="unfilled"></span>
+        </div1>   
+    
+        <div class = "btn-group">
             <button class="button bp1" id="0-10 years">0-10 years</button>
             <button class="button bp2" id="10-20 years">10-20 years</button>
             <button class="button bp3" id="20-35 years">20-35 years</button>
             <button class="button bp4" id="35-60 years">35-60 years</button>
             <button class="button bp5" id="Above 60 years">Above 60 years</button>
-        </div>
-    <style>
+        </div>>
+    <style>      
     </style>
     <script>
         const button1 = document.getElementById('0-10 years');
@@ -81,6 +110,11 @@
             const age = this.id
             console.log(this.id)
             $.post( "/age", {'age': age});
+
+            button2.style.backgroundColor = '#C4C4C4';
+            button3.style.backgroundColor = '#C4C4C4';
+            button4.style.backgroundColor = '#C4C4C4';
+            button5.style.backgroundColor = '#C4C4C4';
         });
 
         button2.addEventListener('click', function onClick() {
@@ -89,6 +123,11 @@
             const age = this.id
             console.log(this.id)
             $.post( "/age", {'age': age});
+
+            button1.style.backgroundColor = '#C4C4C4';
+            button3.style.backgroundColor = '#C4C4C4';
+            button4.style.backgroundColor = '#C4C4C4';
+            button5.style.backgroundColor = '#C4C4C4';
         });
 
         button3.addEventListener('click', function onClick() {
@@ -97,6 +136,11 @@
             const age = this.id
             console.log(this.id)
             $.post( "/age", {'age': age});
+
+            button1.style.backgroundColor = '#C4C4C4';
+            button2.style.backgroundColor = '#C4C4C4';
+            button4.style.backgroundColor = '#C4C4C4';
+            button5.style.backgroundColor = '#C4C4C4';
         });
 
         button4.addEventListener('click', function onClick() {
@@ -105,6 +149,10 @@
             const age = this.id
             console.log(this.id)
             $.post( "/age", {'age': age});
+            button1.style.backgroundColor = '#C4C4C4';
+            button2.style.backgroundColor = '#C4C4C4';
+            button3.style.backgroundColor = '#C4C4C4';
+            button5.style.backgroundColor = '#C4C4C4';
         });
 
         button5.addEventListener('click', function onClick() {
@@ -113,7 +161,12 @@
             const age = this.id
             console.log(this.id)
             $.post( "/age", {'age': age});
+            button1.style.backgroundColor = '#C4C4C4';
+            button3.style.backgroundColor = '#C4C4C4';
+            button4.style.backgroundColor = '#C4C4C4';
+            button2.style.backgroundColor = '#C4C4C4';
         });
+
     </script>
     <a class = "right arrow clip" style="position:fixed; left:1300px; top:600px;" href="{{ url_for('select_country') }}"></a>
 <html>

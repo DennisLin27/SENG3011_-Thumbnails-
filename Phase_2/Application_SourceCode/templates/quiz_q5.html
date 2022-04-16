@@ -14,6 +14,28 @@
       <li><a class="menu__item" href="{{ url_for('doctor') }}">Doctors</a></li>
     </ul>
   </div>
+  <style>
+    .dot {
+          height: 25px;
+          width: 25px;
+          margin-left: 10px;
+          border-radius: 50%;
+          display: inline-block;
+          margin-top: 470px;
+      }
+  
+    div1 {
+         
+         margin-left: 640px;
+     }
+  
+     #filled {
+         background-color:rgb(91, 189, 156);
+     }
+     #unfilled {
+         background-color: aliceblue;
+     }
+  </style> 
 <head>
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
@@ -66,6 +88,15 @@
         <button class="button button2 bp4" id="1-2 weeks">1-2 weeks</button>
         <button class="button button2 bp5" id="Over 2 weeks">Over 2 weeks</button>
 
+        <div1>
+            <span class="dot" id="filled"></span>
+            <span class="dot" id="filled"></span>
+            <span class="dot" id="filled"></span>
+            <span class="dot" id="filled"></span>
+            <span class="dot" id="filled"></span>
+            <span class="dot" id="unfilled"></span>
+          </div1>
+       
     </body>
 
     <script>
@@ -81,6 +112,11 @@
             const length = this.id
             console.log(this.id)
             $.post( "/symptoms/length", {'length': length});
+
+            button2.style.backgroundColor = '#008CBA';
+            button3.style.backgroundColor = '#008CBA';
+            button4.style.backgroundColor = '#008CBA';
+            button5.style.backgroundColor = '#008CBA';
         });
         button2.addEventListener('click', function onClick() {
             button2.style.backgroundColor = 'salmon';
@@ -88,6 +124,10 @@
             const length = this.id
             console.log(this.id)
             $.post( "/symptoms/length", {'length': length});
+            button1.style.backgroundColor = '#008CBA';
+            button3.style.backgroundColor = '#008CBA';
+            button4.style.backgroundColor = '#008CBA';
+            button5.style.backgroundColor = '#008CBA';
         })
         button3.addEventListener('click', function onClick() {
             button3.style.backgroundColor = 'salmon';
@@ -95,6 +135,10 @@
             const length = this.id
             console.log(this.id)
             $.post( "/symptoms/length", {'length': length});
+            button1.style.backgroundColor = '#008CBA';
+            button2.style.backgroundColor = '#008CBA';
+            button4.style.backgroundColor = '#008CBA';
+            button5.style.backgroundColor = '#008CBA';
         });
         button4.addEventListener('click', function onClick() {
             button4.style.backgroundColor = 'salmon';
@@ -102,6 +146,10 @@
             const length = this.id
             console.log(this.id)
             $.post( "/symptoms/length", {'length': length});
+            button1.style.backgroundColor = '#008CBA';
+            button3.style.backgroundColor = '#008CBA';
+            button2.style.backgroundColor = '#008CBA';
+            button5.style.backgroundColor = '#008CBA';
         });
         button5.addEventListener('click', function onClick() {
             button5.style.backgroundColor = 'salmon';
@@ -109,6 +157,10 @@
             const length = this.id
             console.log(this.id)
             $.post( "/symptoms/length", {'length': length});
+            button1.style.backgroundColor = '#008CBA';
+            button3.style.backgroundColor = '#008CBA';
+            button4.style.backgroundColor = '#008CBA';
+            button2.style.backgroundColor = '#008CBA';
         });
     </script>
     <a class = "left arrow clip" style="position:fixed; left:200px; top:600px;" href="{{ url_for('symptoms') }}"></a>

@@ -14,6 +14,28 @@
       <li><a class="menu__item" href="{{ url_for('doctor') }}">Doctors</a></li>
     </ul>
   </div>
+<style>
+  .dot {
+        height: 25px;
+        width: 25px;
+        margin-left: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-top: 430px;
+    }
+
+  div1 {
+       
+       margin-left: 640px;
+   }
+
+   #filled {
+       background-color:rgb(91, 189, 156);
+   }
+   #unfilled {
+       background-color: aliceblue;
+   }
+</style> 
 <head>
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
@@ -22,7 +44,18 @@
     <body>
       <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> What city are you from?</h1>
         <input style="width:35%;position:relative;left:500px;height:60px;font-size:150%" name="Cities" list="cities_list" onchange="getSelectedCity(this.value)">
-        <datalist id="cities_list" ></datalist>
+        <div>
+          <datalist id="cities_list" ></datalist>
+        </div>
+        
+        <div1>
+          <span class="dot" id="filled"></span>
+          <span class="dot" id="filled"></span>
+          <span class="dot" id="filled"></span>
+          <span class="dot" id="unfilled"></span>
+          <span class="dot" id="unfilled"></span>
+          <span class="dot" id="unfilled"></span>
+        </div1>
 
         <script>
             var c = '{{ cities|tojson }}'
