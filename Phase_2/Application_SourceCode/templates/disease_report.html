@@ -111,16 +111,27 @@
               var obj = diseases[i];
               console.log(obj.Name)
             }
-
-            var options = ''
-            for (var i = 0; i < diseases.length; i++) {
-                obj = diseases[i]
-                var str1 = '<button class="collapsible">' + obj.Name + ' - ' + obj.Accuracy +'</button><div class="content"><p><h2>'
-                var str2 = obj.Country +'</h2><h4>'+ obj.Description +'</h4><a href="' + obj.Links + '">' + obj.Links + '</a><br><br>'+ '</p></div>'
-                var final_str = str1 + str2
-                options +=  final_str
+            if (diseases[0].Name == "No match") {
+              document.write('<h3 style="text-align: center;">Your symptoms do not match any disease in our database</h3>')
             }
-            document.getElementById('data').innerHTML = options;
+            else {
+              var options = ''
+              for (var i = 0; i < diseases.length; i++) {
+                  obj = diseases[i]
+                  var str1 = '<button class="collapsible">' + obj.Name + ' - ' + obj.Accuracy +'</button><div class="content"><p><h2>'
+                  var str2 = obj.Name +'</h2><p>'+ obj.Description +'</p><h3>Medical Symptoms</h3><p>' + obj.MedicalCondition + '</p><h3>Treatment</h3><p>' + obj.Treatment
+                  var str3 = '</p></p></div>'
+                  var final_str = str1 + str2 + str3
+                  //if an outbreak article exists
+                  if (obj.Headline != "empty") {
+                    var str4 = '</p><h2>Outbreaks Near You</h2><h3>' + '<a href="' + obj.url + '">' + obj.Headline + '</a>'
+                    var str5 = '</h3><p>' + obj.OutbreaksDescription + '</p><br><br>'+ '</p></div>'
+                    final_str = str1 + str2 + str4 + str5
+                  }
+                  options +=  final_str
+              }
+              document.getElementById('data').innerHTML = options;
+            }
         </script>
         <script>
         var coll = document.getElementById("data").getElementsByClassName("collapsible")
