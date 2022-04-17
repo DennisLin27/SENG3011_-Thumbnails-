@@ -56,7 +56,7 @@
 
           map = new google.maps.Map(document.getElementById("map"), {
               center: {lat:-33.867, lng:151.195},
-              zoom: 13.5,
+              zoom: 13,
               mapTypeControl: false,
           });
 
@@ -91,13 +91,13 @@
               map.fitBounds(place.geometry.viewport);
               } else {
               map.setCenter(place.geometry.location);
-              map.setZoom(13);
+              map.setZoom(14);
               }
 
               place.formatted_address;
               searchNearby(place)
               createAnchor(place)
-              map.setZoom(13)
+              map.setZoom(14)
           });
 
       }
@@ -201,7 +201,7 @@
     <h1 style="font-size:250%;font-family:arial;color:white;">Find a Doctor</h1>
     <div id = "expand" style="text-align:center;padding-left: 75%;">
       <div class="tooltip"><i class="fa fa-info-circle" style="font-size:20px;"></i>
-        <span class="tooltiptext">Find Doctors within a 2km radius of address entered!</span>
+        <span class="tooltiptext">Enter a street address to find doctors within a 3km radius!</span>
       </div> 
     </div>
   </div>
