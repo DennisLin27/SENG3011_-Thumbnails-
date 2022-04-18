@@ -35,7 +35,7 @@ Nitharshni Chennai Kumaravel z5255563
 **Deliverable 4:**
 1. Updated UI details and minor UI changes
 2. Added progression bar for user to view survey progresssion, information icons for viewing instructions
-3. Perfected symptom matching using Dwen Dwen API, as well as description and additional information that comes with the results
+3. Perfected symptom matching as well as description and additional information that comes with the results
 4. Integrated APIs to achieve better disease reports, search results and symptom matching
 5. Connected SQLite database to the frontend and successfully stored user surveys
 6. Sharing application for users to use and populate database
