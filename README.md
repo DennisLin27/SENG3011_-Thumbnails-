@@ -29,7 +29,7 @@ Nitharshni Chennai Kumaravel z5255563
 5. Implemented Symptom Checker using APIMedic
 6. Implemented country and cities drop down boxes and auto fill in the Symptom Checker survey using Countries and Cities APIs.
 7. Implemented Find Doctor and Find Chemists features using Google Map APIs.
-8. Application presentation script and powerpoint slides
+8. Application presentation script and powerpoint slides: including Business Values, Key requirements and technical archietectures.
 9. Updated Design Report, Project Management Plan and Gantt chart in Design Documentation Report
 
 **Deliverable 4:**
@@ -39,4 +39,4 @@ Nitharshni Chennai Kumaravel z5255563
 4. Integrated APIs to achieve better disease reports, search results and symptom matching
 5. Connected SQLite database to the frontend and successfully stored user surveys
 6. Sharing application for users to use and populate database
-7. Presentation scripts about our achievements and what more could be done.
+7. Presentation scripts about our achievements and what more could be done, technical POV and business ideas.
