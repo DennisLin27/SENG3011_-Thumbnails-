@@ -2,111 +2,180 @@
 <head>
   <link rel="stylesheet" href="../static/menu.css" />
   <link  rel="stylesheet" href="../static/chemist.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
+<style>
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
 
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
     <script>
       // This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+      var marker_list = new Array
+
       function initMap() {
 
-        map = new google.maps.Map(document.getElementById("map"), {
-            center: {lat:-33.867, lng:151.195},
-            zoom: 13.5,
-            mapTypeControl: false,
-        });
+          map = new google.maps.Map(document.getElementById("map"), {
+              center: {lat:-33.867, lng:151.195},
+              zoom: 13,
+              mapTypeControl: false,
+          });
 
-        const input = document.getElementById("pac-input");
-        const options = {
-            fields: ["formatted_address", "geometry", "name"],
-            types: ["address"],
-        };
+          const input = document.getElementById("pac-input");
 
-        const autocomplete = new google.maps.places.Autocomplete(input, options);
-        const infowindow = new google.maps.InfoWindow();
-        const infowindowContent = document.getElementById("infowindow-content");
-        infowindow.setContent(infowindowContent);
+          const options = {
+              fields: ["formatted_address", "geometry", "name"],
+              types: ["address"],
+              radius: 3000
+          };
 
-        const marker = new google.maps.Marker({
-            map,
-            anchorPoint: new google.maps.Point(0, -29),
-        });
+          const autocomplete = new google.maps.places.Autocomplete(input, options);
 
-        autocomplete.addListener("place_changed", () => {
-            infowindow.close();
-            //marker.setVisible(false);
+          const marker = new google.maps.Marker({
+              map,
+              anchorPoint: new google.maps.Point(0, -29),
+          });
 
-            const place = autocomplete.getPlace();
+          autocomplete.addListener("place_changed", () => {
 
-            if (!place.geometry || !place.geometry.location) {
-            // User entered the name of a Place that was not suggested and
-            // pressed the Enter key, or the Place Details request failed.
-            window.alert("No details available for input: '" + place.name + "'");
-            return;
-            }
+              const place = autocomplete.getPlace();
 
-            // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-            } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(15);
-            }
+              if (!place.geometry || !place.geometry.location) {
+              // User entered the name of a Place that was not suggested and
+              // pressed the Enter key, or the Place Details request failed.
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+              }
 
-            //marker.setPosition(place.geometry.location);
-            //marker.setVisible(true);
-            infowindowContent.children["place-name"].textContent = place.name;
-            infowindowContent.children["place-address"].textContent =
-            place.formatted_address;
-            infowindow.open(map, marker);
+              // If the place has a geometry, then present it on a map.
+              if (place.geometry.viewport) {
+              map.fitBounds(place.geometry.viewport);
+              } else {
+              map.setCenter(place.geometry.location);
+              map.setZoom(14);
+              }
 
-            createAnchor(place)
-            searchNearby(place)
-            map.setZoom(15)
-        });
+              place.formatted_address;
+              searchNearby(place)
+              createAnchor(place)
+              map.setZoom(14)
+          });
 
       }
 
       function searchNearby(place) {
-      var request = {
-          location: place.geometry.location,
-          radius: '2000',
-          type: ['doctor']
-      };
 
-      service = new google.maps.places. PlacesService(map);
-      service.nearbySearch(request, callback);
+          var request = {
+              location: place.geometry.location,
+              radius: 3000,
+              type: ['doctor']
+          };
+
+          service = new google.maps.places. PlacesService(map);
+          removeMarkers()
+          service.nearbySearch(request, callback);
+      }
+
+      function removeMarkers(){
+          for (var i = 0; i < marker_list.length; i++){
+              marker_list[i].setMap(null)
+          }
+          marker_list = []
+
+          for (var x = 0; x < anchorList.length; x++){
+              anchorList[x].setMap(null)
+          }
+          anchorList = []
       }
 
       function callback(results, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-              console.log(results[i])
-              createMarker(results[i]);
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+              for (var i = 0; i < results.length; i++) {
+                  console.log(results[i])
+                  //createMarker(results[i]);
+                  
+                  const marker = new google.maps.Marker({
+                      position: results[i].geometry.location,
+                      map,
+                      optimized: false,
+                  });
+
+                  const contentString = 
+                      '<div id = "content">' + 
+                      '<p><b>Name: </b>' + results[i].name + 
+                      '</p><p><b>Address: </b>' + results[i].vicinity + '</p>' +
+                      '</div>'       
+
+                  const infoWindow = new google.maps.InfoWindow({
+                      content: contentString
+                  })
+
+
+                  marker.addListener("click",() => {
+                      infoWindow.open({
+                          anchor:marker,
+                          map,
+                      })
+                  })
+
+                  marker_list.push(marker)
+              }
           }
-      }
-      }
+        }
 
-      function createMarker(place){
-      if (!place.geometry || !place.geometry.location) return;
-
-      new google.maps.Marker({
-          position: place.geometry.location,
-          map
-        });
-      }
-
+      var anchorList = new Array
       function createAnchor(place){
-      if (!place.geometry || !place.geometry.location) return;
+          if (!place.geometry || !place.geometry.location) return;
 
-      new google.maps.Marker({
-          position: place.geometry.location,
-          animation: google.maps.Animation.BOUNCE,
-
-          map: map
-        });
+          anchor = new google.maps.Marker({
+              position: place.geometry.location,
+              map: map,
+              title: "Your Location",
+              icon: {
+                  url: '../static/home-map-location.png',
+                  scaledSize: new google.maps.Size(25,25)
+              },
+            });
+          anchorList.push(anchor)
       }
     </script>
   <title>Find a Doctor</title>
@@ -130,6 +199,11 @@
   <p><a href="{{ url_for('home') }}">Home!</a></p>
   <div id="header">
     <h1 style="font-size:250%;font-family:arial;color:white;">Find a Doctor</h1>
+    <div id = "expand" style="text-align:center;padding-left: 75%;">
+      <div class="tooltip"><i class="fa fa-info-circle" style="font-size:20px;"></i>
+        <span class="tooltiptext">Enter a street address to find doctors within a 3km radius!</span>
+      </div> 
+    </div>
   </div>
   <div class="search">
     <div id="pac-container">

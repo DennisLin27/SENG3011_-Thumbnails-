@@ -13,28 +13,65 @@
       <li><a class="menu__item" href="{{ url_for('chemist') }}">Chemists</a></li>
       <li><a class="menu__item" href="{{ url_for('doctor') }}">Doctors</a></li>
     </ul>
-  </div>
+
+  <style>
+    .dot {
+          height: 25px;
+          width: 25px;
+          margin-left: 10px;
+          border-radius: 50%;
+          display: inline-block;
+          margin-top: 190px;
+      }
+  
+    div1 {
+         
+         margin-left: 640px;
+     }
+  
+     #filled {
+         background-color:rgb(91, 189, 156);
+     }
+     #unfilled {
+         background-color: aliceblue;
+     }
+  </style>
+  
 <head>
     <script type="text/javascript" 
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     </script>
 
     <body>
+      <div>
       <h1 style="font-size:250%;font-family:arial;color:white;text-align:center;"> Anything else we should know?</h1>
       <form style="width:40%;position:relative;left:450px;font-size:150%">
-          <textarea style="background:-color:C4C4C4;width:100%;position:relative;left:0px;height:200px;font-size:150%;border-radius: 15px;" id="text"name="myTextBox" cols="50" rows="5">
+          <textarea style="background-color:white ;width:100%; position:relative; left:0px;height:200px;font-size:150%;border-radius: 15px;" id="text"name="myTextBox" cols="50" rows="5">
           </textarea>
           <br></br>
           <a href = "{{ url_for('disease_report') }}">
           <input style="left:1200px; top:600px; position: fixed; background-color: salmon;border: none;color: white;font-weight:700;font-size:21px;width:120px;height: 80px;text-align: center;border-radius: 15px;"type="button" value="Submit" onclick="getdata((document.getElementById('text').value))"/>
         </ahref>
         </form>
+      </div>
+    
+      <div1>
+        <span class="dot" id="filled"></span>
+        <span class="dot" id="filled"></span>
+        <span class="dot" id="filled"></span>
+        <span class="dot" id="filled"></span>
+        <span class="dot" id="filled"></span>
+        <span class="dot" id="filled"></span>
+      </div1>
+
       <script>
         function getdata(value) {
           console.log(value)
           $.post( "/additionalInfo", {'data': value});
         }
+        
       </script>
     </body>
+
   <a class = "left arrow clip" style="position:fixed; left:200px; top:600px;" href="{{ url_for('symptoms_length') }}"></a>
 <html>

@@ -1,4 +1,7 @@
+from distutils.log import info
+from gc import collect
 from tkinter import Variable
+from matplotlib.font_manager import json_dump
 import requests
 from flask import Flask, render_template, request, jsonify
 import disease_symptoms
@@ -7,11 +10,12 @@ import hmac, hashlib
 import enum 
 import base64
 import json
-
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, select, func
+import re
 app = Flask(__name__)
 
 #list of all countries
-def all_countries():
+def get_all_countries():
   page = requests.get("https://countriesnow.space/api/v0.1/countries")
   data = page.json()["data"]
   countries = []
@@ -29,9 +33,32 @@ def get_cities(country_given):
     if (country == country_given):
       return cities
 
+all_countries = get_all_countries()
 selected_country = ""
 collected_data = {}
 
+#some default options
+collected_data["age_group"] = ""
+collected_data["country"] = "Indonesia"
+collected_data["city"] = ""
+collected_data["symptoms"] = ["Abdominal pain", "Fever","Pain in the limbs"]
+collected_data["symptoms_length"] = ""
+collected_data["additional_info"] = ""
+
+#create database
+meta = MetaData()
+engine = create_engine('sqlite:///FormInfo.db', echo = True)
+Info = Table(
+    'actors', meta,
+    Column('id', Integer, primary_key = True, autoincrement=True),
+    Column('age_group', String),
+    Column('country', String),
+    Column('city', String),
+    Column('symptoms', String),
+    Column('symptoms_length', String),
+    Column('additional_info', String),
+)
+meta.create_all(engine)
 
 @app.route('/')
 def home():
@@ -56,8 +83,9 @@ def age():
 
 @app.route('/location', methods=['POST', 'GET'])
 def select_country():
+    global all_countries
     if request.method == "POST":
-        countries = all_countries()
+        countries = all_countries
         global selected_country
         selected_country = request.form['country']
         global collected_data
@@ -66,7 +94,7 @@ def select_country():
         print(selected_country)
         return render_template('quiz_q2.html', countries=countries)
     else:
-        countries = all_countries()
+        countries = all_countries
         return render_template('quiz_q2.html', countries=countries)
 
 @app.route('/location/city', methods=['POST', 'GET'])
@@ -90,6 +118,10 @@ def select_city():
 def symptoms():
   if request.method == "POST":
     symptoms = disease_symptoms.get_symptoms()
+    symptoms_returned = request.form['symptoms']
+    global collected_data
+    collected_data["symptoms"] = json.loads(symptoms_returned)
+    print(symptoms_returned)
     return render_template('quiz_q4.html', symptoms=symptoms)
   else:
     symptoms = disease_symptoms.get_symptoms()
@@ -108,8 +140,7 @@ def symptoms_length():
 def additional_info():
   if request.method == "POST":
       additional_info = request.form['data']
-      additional_info = urllib.parse.unquote(additional_info)
-      print(additional_info)
+      additional_info = (urllib.parse.unquote(additional_info)).strip()
       global collected_data
       collected_data["additional_info"] = additional_info
       return render_template('quiz_q6.html')
@@ -118,6 +149,13 @@ def additional_info():
 
 @app.route('/diseaseReport')
 def disease_report():
+
+    global collected_data
+    db_data = collected_data.copy()
+    db_data["symptoms"] = ",".join(db_data["symptoms"])
+    conn = engine.connect()
+    conn.execute(Info.insert(), [db_data])
+
     username = 'z5234001@ad.unsw.edu.au'
     url = 'https://sandbox-authservice.priaid.ch/login'
     password = 'r6KSm24LbMa78Tfd5'
@@ -129,42 +167,70 @@ def disease_report():
     }
     responsePost = requests.post(url,headers=postHeaders)
     data = json.loads(responsePost.text)
+    symptoms_list = collected_data["symptoms"]
+    symptoms_converted = disease_symptoms.get_ids(symptoms_list)
 
     parameters2 = {
         "token": data['Token'],
-        "symptoms": json.dumps([10,11,12]), 
+        "symptoms": json.dumps(symptoms_converted), 
         "gender": 'male', 
         "year_of_birth": 1988,
         "language" : 'en-gb',
         "format": 'json'
     }
+
     response = requests.get("https://sandbox-healthservice.priaid.ch/diagnosis", params=parameters2)
     response = response.json()
     results = []
+    
+    if not response:
+      disease_data = {}
+      disease_data["Name"] = "No match"
+      results.append(disease_data)
+    else:
+    
+      for r in response:
+          disease_data = {}
 
-    api_response = requests.get('http://13.52.98.118/articles?key_term=flu&location=Australia&start_date=1900-03-03%2000%3A00%3A00&end_date=2022-03-03%2000%3A00%3A00&limit=1')
-    api_response = api_response.json()
+          #get the disease match
+          disease_data["Name"] = r["Issue"]["Name"]
+          disease_data["Accuracy"] = str(int(r["Issue"]["Accuracy"])) + "% match to your symptoms!"
+          parameters = {
+          "token": data['Token'],
+          "language" : 'en-gb',
+          "format": 'json'
+          }
 
-    for r in response:
-      new_dict = {}
-      new_dict["Name"] = r["Issue"]["Name"]
-      new_dict["Accuracy"] = str(int(r["Issue"]["Accuracy"])) + "% match to your symptoms!"
-      try:
-        key_term = r["Issue"]["Name"]
-        if (key_term == "Listeria infection"):
-          key_term = "listeriosis"
-        api_response = requests.get('http://13.52.98.118/articles?key_term='+str(key_term)+'&location=Australia&start_date=1900-03-03%2000%3A00%3A00&end_date=2022-03-03%2000%3A00%3A00&limit=1')
-        api_response = api_response.json()[0]
-        new_dict["Country"] = "Outbreaks near " + api_response["country"]
-        new_dict["Description"] = api_response["description"]
-        new_dict["Links"] = api_response["links"][0] 
-      except:
-        new_dict["Country"] = "Disease found in country:"
-        new_dict["Description"] = "Article description:"
-        new_dict["Links"] = "links:"
-      results.append(new_dict)
+          #get a description of the disease
+          description = requests.get("https://sandbox-healthservice.priaid.ch/issues/{}/info".format(str(r["Issue"]["ID"])), params=parameters)
+          description = description.json()
+          disease_data["Description"] = description["Description"]
+          disease_data["MedicalCondition"] = description["MedicalCondition"]
+          disease_data["Treatment"] = description["TreatmentDescription"]
+
+          #call api to find outbreak information
+          disease_data["Headline"] = "empty"
+          disease_data["outbreakDescription"] = "empty"
+          disease_data["url"] = "empty"
+
+          disease = r["Issue"]["Name"]
+          country = collected_data["country"]
+          outbreak = requests.get("https://seng3011-dwen.herokuapp.com/articles?limit=20&start_date=2000-01-10&end_date=2022-01-20&key_terms={}&key_terms={}".format(disease, country))
+          outbreak = outbreak.json()
+          for o in outbreak:
+              if (disease_data["Headline"] != "empty"):
+                  break
+              for l in o["locations"]:
+                  if l == country:
+                      disease_data["Headline"] = o["headline"].replace('\n', "")
+                      disease_data["OutbreaksDescription"] = re.sub('\n.+\n\n', "", o["main_text"])
+                      disease_data["OutbreaksDescription"] = disease_data["OutbreaksDescription"].replace('\n', "")
+                      disease_data["url"] = o["url"]
+                      break
+          results.append(disease_data)
     print(results)
     return render_template('disease_report.html', results=results)
+
 
 if __name__ == '__main__':
   app.run(debug=True, host='localhost')
