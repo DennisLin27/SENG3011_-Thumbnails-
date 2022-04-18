@@ -21,5 +21,5 @@ Nitharshni Chennai Kumaravel z5255563
 6. Log snippet that are sent directly to user as well as storing request info as log file in backend.
 7. Updated Design Report, Project Management Plan and Gantt chart in Design Documentation Report
 
-**Deliverable 3: **
+**Deliverable 3:**
 1. 
