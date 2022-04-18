@@ -132,7 +132,7 @@ def symptoms_length():
   if request.method == "POST":
       length = request.form['length']
       global collected_data
-      collected_data["symptom_length"] = length
+      collected_data["symptoms_length"] = length
       print(length)
   return render_template('quiz_q5.html')
 
@@ -152,6 +152,7 @@ def disease_report():
 
     global collected_data
     db_data = collected_data.copy()
+    print(db_data)
     db_data["symptoms"] = ",".join(db_data["symptoms"])
     conn = engine.connect()
     conn.execute(Info.insert(), [db_data])
