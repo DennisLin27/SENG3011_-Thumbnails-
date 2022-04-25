@@ -42,3 +42,4 @@ Nitharshni Chennai Kumaravel z5255563
 7. Presentation scripts about our achievements and what more could be done, technical POV and business ideas.
 8. Final use cases report including API overview, software archietecture, final implementations, use cases, user stories, persona descriptions
 9. System design + implementation report including API software architecture, webapp architecture, technology stack justification, API utilization, UI design prototyping, and final thoughts/future improvements.
+10. Updated Project Management Plan and Gantt chart.
