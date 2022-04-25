@@ -40,3 +40,5 @@ Nitharshni Chennai Kumaravel z5255563
 5. Connected SQLite database to the frontend and successfully stored user surveys
 6. Sharing application for users to use and populate database
 7. Presentation scripts about our achievements and what more could be done, technical POV and business ideas.
+8. Final use cases report including API overview, software archietecture, final implementations, use cases, user stories, persona descriptions
+9. System design + implementation report including API software architecture, webapp architecture, technology stack justification, API utilization, UI design prototyping, and final thoughts/future improvements.
